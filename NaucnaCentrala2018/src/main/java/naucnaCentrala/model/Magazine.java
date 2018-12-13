@@ -1,14 +1,21 @@
 package naucnaCentrala.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Magazine {
+
+
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -16,9 +23,19 @@ public class Magazine {
 	
 	private String name;
 	private String ISSNnumber;
-	private ArrayList<String> sections;
+	
+	@ManyToMany
+	private Set<ScientificArea> sections = new HashSet<>();
 	private String paymentMethod;
 	
+	@OneToOne
+	private EditorReviewer mainEditor;
+	
+	@OneToMany
+	private Set<EditorReviewer> otherEditors = new HashSet<>();
+	
+	@ManyToMany
+	private Set<EditorReviewer> reviewers = new HashSet<>();
 	
 	public Magazine() {
 		
@@ -26,13 +43,21 @@ public class Magazine {
 		
 	}
 	
-	public Magazine(String name, String iSSNnumber, ArrayList<String> sections, String paymentMethod) {
+
+	public Magazine(Long id, String name, String iSSNnumber, Set<ScientificArea> sections, String paymentMethod,
+			EditorReviewer mainEditor, Set<EditorReviewer> otherEditors, Set<EditorReviewer> reviewers) {
 		
+		this.id = id;
 		this.name = name;
 		this.ISSNnumber = iSSNnumber;
-		this.sections = new ArrayList<String>();
+		this.sections = sections;
 		this.paymentMethod = paymentMethod;
+		this.mainEditor = mainEditor;
+		this.otherEditors = otherEditors;
+		this.reviewers = reviewers;
 	}
+
+	
 
 	public String getName() {
 		return name;
@@ -50,13 +75,7 @@ public class Magazine {
 		ISSNnumber = iSSNnumber;
 	}
 
-	public ArrayList<String> getSections() {
-		return sections;
-	}
-
-	public void setSections(ArrayList<String> sections) {
-		this.sections = sections;
-	}
+	
 
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -64,6 +83,54 @@ public class Magazine {
 
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
+	}
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public EditorReviewer getMainEditor() {
+		return mainEditor;
+	}
+
+
+
+	public void setMainEditor(EditorReviewer mainEditor) {
+		this.mainEditor = mainEditor;
+	}
+
+
+
+	public Set<EditorReviewer> getOtherEditors() {
+		return otherEditors;
+	}
+
+
+
+	public void setOtherEditors(Set<EditorReviewer> otherEditors) {
+		this.otherEditors = otherEditors;
+	}
+
+
+
+	public Set<EditorReviewer> getReviewers() {
+		return reviewers;
+	}
+
+
+
+	public void setReviewers(Set<EditorReviewer> reviewers) {
+		this.reviewers = reviewers;
 	}
 	
 

@@ -11,8 +11,13 @@ import naucnaCentrala.model.Magazine;
 
 
 @Entity
-public class Editor {
+public class EditorReviewer {
 	
+
+
+	
+
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -24,35 +29,38 @@ public class Editor {
 	private String title;
 	private String email;
 	private ArrayList<String> sections;
-	private ArrayList<Magazine> magazines;   // ako je urednik size=1, ako je recezent size>=1
-	private boolean isReviewer;  //ako je urednik onda je false, ako je recezent onda je true
+	
+	
+	//private ArrayList<Magazine> magazines;   // ako je urednik size=1, ako je recezent size>=1
+	private boolean isReviewer;  // ako je urednik onda je false, ako je recezent onda je true
+	private boolean isEditor;  // ako je urednik onda je true, ako je recezent onda je false
 	
 	private String username;
 	private String password;
 	
-	public Editor() {
+	public EditorReviewer() {
 		
 		
 		
 	}
 	
-	
-	public Editor(String name, String surname, String city, String country, String title, String email,
-			ArrayList<String> sections, ArrayList<Magazine> magazines, boolean isReviewer, String username,
-			String password) {
-		
+	public EditorReviewer(Long id, String name, String surname, String city, String country, String title, String email,
+			ArrayList<String> sections, boolean isReviewer, boolean isEditor, String username, String password) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.city = city;
 		this.country = country;
 		this.title = title;
 		this.email = email;
-		this.sections = new ArrayList<String>();
-		this.magazines = new ArrayList<Magazine>();
+		this.sections = sections;
 		this.isReviewer = true;
+		this.isEditor = true;
 		this.username = username;
 		this.password = password;
 	}
+	
 
 
 	public String getName() {
@@ -124,7 +132,7 @@ public class Editor {
 		this.sections = sections;
 	}
 
-
+	/*
 	public ArrayList<Magazine> getMagazines() {
 		return magazines;
 	}
@@ -133,7 +141,7 @@ public class Editor {
 	public void setMagazines(ArrayList<Magazine> magazines) {
 		this.magazines = magazines;
 	}
-
+	*/
 
 	public boolean isReviewer() {
 		return isReviewer;
@@ -162,6 +170,26 @@ public class Editor {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public boolean isEditor() {
+		return isEditor;
+	}
+
+
+	public void setEditor(boolean isEditor) {
+		this.isEditor = isEditor;
 	}
 	
 

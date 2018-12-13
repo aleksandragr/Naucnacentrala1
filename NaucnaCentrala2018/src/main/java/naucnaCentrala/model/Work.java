@@ -12,6 +12,8 @@ import naucnaCentrala.model.User;
 @Entity
 public class Work {
 	
+	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -30,9 +32,10 @@ public class Work {
 		
 	}
 
-	public Work(String heading, ArrayList<User> coauthors, ArrayList<String> keyTerms, boolean isAbstract,
+	public Work(Long id, String heading, ArrayList<User> coauthors, ArrayList<String> keyTerms, boolean isAbstract,
 			String section) {
 		
+		this.id = id;
 		this.heading = heading;
 		this.coauthors = coauthors;
 		this.keyTerms = keyTerms;
@@ -78,6 +81,14 @@ public class Work {
 
 	public void setSection(String section) {
 		this.section = section;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 
