@@ -1,14 +1,19 @@
 package naucnaCentrala.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User {
-	
-	
+
 
 
 	@Id
@@ -24,6 +29,10 @@ public class User {
 	
 	private String username;
 	private String password;
+	private String confirmP;
+	
+	@ManyToMany(fetch=FetchType.EAGER, cascade= CascadeType.MERGE)
+	private Set<Role> roles= new HashSet<>();
 	
 	public User() {
 		
@@ -32,8 +41,10 @@ public class User {
 	}
 	
 
+
+
 	public User(Long id, String name, String surname, String city, String country, String email, boolean isAuthor,
-			String username, String password) {
+			String username, String password, String confirmP, Set<Role> roles) {
 		
 		this.id = id;
 		this.name = name;
@@ -44,7 +55,14 @@ public class User {
 		this.isAuthor = isAuthor;
 		this.username = username;
 		this.password = password;
+		this.confirmP = confirmP;
+		this.roles = roles;
 	}
+
+
+
+	
+
 
 
 	public String getName() {
@@ -134,6 +152,34 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+
+
+
+	public String getConfirmP() {
+		return confirmP;
+	}
+
+
+
+
+	public void setConfirmP(String confirmP) {
+		this.confirmP = confirmP;
+	}
+
+
+
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+
+
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 

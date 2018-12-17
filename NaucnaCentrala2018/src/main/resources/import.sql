@@ -16,3 +16,6 @@ INSERT INTO `nc`.`scientific_area` (`id`, `code`, `name`) VALUES ('2','HEM','Hem
 
 INSERT INTO `nc`.`magazine_sections` (`magazine_id`, `sections_id`) VALUES ('1','1');
 INSERT INTO `nc`.`magazine_sections` (`magazine_id`, `sections_id`) VALUES ('1','2');
+
+INSERT INTO `nc`.`role` (`id`, `description`, `name`) VALUES ('1','user','USER');
+INSERT INTO `nc`.`role` (`id`, `description`, `name`) VALUES ('2','author','AUTHOR');
