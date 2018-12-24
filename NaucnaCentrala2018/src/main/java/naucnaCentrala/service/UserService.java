@@ -25,29 +25,32 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	public User singUp(User user) {
+	public String singUp(User user) {
 		
 		ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
 		System.out.println("aaaa");
 		for(int i=0; i<users.size(); i++) {
-			if(users.get(i).getUsername().equals(user.getUsername())) {
-				System.out.println("for");
+			if(users.get(i).getUsername().equals(user.getUsername())) {				
+				//return "User with this username exists!";
 				return null;
 			}
 		}
+		
 		if(user.getConfirmP()!=null) {
-			if(!user.getPassword().equals(user.getConfirmP())) {
-				System.out.println("if");
+			if(!user.getPassword().equals(user.getConfirmP())) {				
+				//return "Password and confirm password aren't equals!";
 				return null;
 			}
 		}
 		
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));		
+		long id = user.getRoles().get(0).getId();
+		if(id==2) {
+			user.setAuthor(true);
+		}
 		
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		System.out.println("prosloooo");
-		User u = userRepository.save(user);
-		System.out.println("bbbbbbb");
-		return u;
+		User u = userRepository.save(user);		
+		return "Successful registration!";
 		
 	}
 
@@ -55,8 +58,7 @@ public class UserService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		User user = userRepository.findByUsername(username);
-		
+		User user = userRepository.findByUsername(username);		
 		if(user == null) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -67,7 +69,7 @@ public class UserService implements UserDetailsService{
 	
 	private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        System.out.println("gagiiii "+user.getRoles().size());
+        
 		user.getRoles().forEach(role -> {
 			//authorities.add(new SimpleGrantedAuthority(role.getName()));
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));

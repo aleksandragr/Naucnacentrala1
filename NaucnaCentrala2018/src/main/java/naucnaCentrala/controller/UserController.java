@@ -17,7 +17,7 @@ import naucnaCentrala.service.UserService;
 
 @Controller
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:8082/")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 	
 	@Autowired
@@ -27,11 +27,15 @@ public class UserController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@PostMapping("/sign-up")
-	public ResponseEntity<HttpStatus> singUp(@RequestBody User user) {
+	public ResponseEntity<String> singUp(@RequestBody User user) {
 		System.out.println("sign-up");
-		User user1 = userService.singUp(user);
+		System.out.println(user.getRoles().size());
+		String user1 = userService.singUp(user);
+		if(user1==null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(user1, HttpStatus.OK);
 	}
 	
 	@PostMapping("/login")
@@ -43,8 +47,10 @@ public class UserController {
 	
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/gagi")
-	public void proba() {
+	public ResponseEntity<HttpStatus> proba() {
 		System.out.println("gagi ljubaviii");
+		return new ResponseEntity<>(HttpStatus.OK);
+		
 	}
 
 }
