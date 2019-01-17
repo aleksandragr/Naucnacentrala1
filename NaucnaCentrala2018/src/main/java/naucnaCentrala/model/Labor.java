@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import naucnaCentrala.model.User;
 
 @Entity
-public class Work {
+public class Labor {
 	
 	
 
@@ -26,13 +26,13 @@ public class Work {
 	//PDF dokument
 	//konacna verzija rada
 	
-	public Work() {
+	public Labor() {
 		
 		
 		
 	}
 
-	public Work(Long id, String heading, ArrayList<User> coauthors, ArrayList<String> keyTerms, boolean isAbstract,
+	public Labor(Long id, String heading, ArrayList<User> coauthors, ArrayList<String> keyTerms, boolean isAbstract,
 			String section) {
 		
 		this.id = id;

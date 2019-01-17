@@ -14,14 +14,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class MembershipFee {
 	
 	
-	
+
+
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@OneToOne
-	private User member;
+	private User user;
 	
 	@JsonFormat(pattern="dd.MM.yyyy", shape=JsonFormat.Shape.STRING, timezone="Europe/Madrid")
 	private Date startDate;
@@ -31,14 +32,21 @@ public class MembershipFee {
 	
 	private String price;
 	
-	public MembershipFee(Long id, User member, Date startDate, Date endDate, String price) {
+	public MembershipFee() {
+		
+		
+	}
+
+
+	public MembershipFee(Long id, User user, Date startDate, Date endDate, String price) {
 		
 		this.id = id;
-		this.member = member;
+		this.user = user;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.price = price;
 	}
+
 
 	public Long getId() {
 		return id;
@@ -48,13 +56,6 @@ public class MembershipFee {
 		this.id = id;
 	}
 
-	public User getMember() {
-		return member;
-	}
-
-	public void setMember(User member) {
-		this.member = member;
-	}
 
 	public Date getStartDate() {
 		return startDate;
@@ -79,5 +80,18 @@ public class MembershipFee {
 	public void setPrice(String price) {
 		this.price = price;
 	}
+
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 }

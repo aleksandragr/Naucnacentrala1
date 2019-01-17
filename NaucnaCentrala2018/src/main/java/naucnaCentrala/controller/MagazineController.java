@@ -29,16 +29,17 @@ public class MagazineController {
 	public ResponseEntity<ArrayList<Magazine>> findAllMagazines (){
 		
 		ArrayList<Magazine> magazines = magazineService.findAll();
-		System.out.println(magazines.size());
+		
 		return new ResponseEntity<>(magazines, HttpStatus.OK);
 	}
 	
-	@PostMapping("/checkMembership/{id}")
-	public ResponseEntity<Magazine> checkMembership(@PathVariable Long id){
-		System.out.println(id+" id");
-		Magazine magazine = magazineService.checkMembership(id);
+	@PreAuthorize("hasRole('AUTHOR')")
+	@GetMapping("/checkMembership/{id}")
+	public ResponseEntity<String> checkMembership(@PathVariable Long id){
 		
-		return new ResponseEntity<>(HttpStatus.OK);
+		String message = magazineService.checkMembership(id);
+		
+		return new ResponseEntity<>(message,HttpStatus.OK);
 	}
 	
 

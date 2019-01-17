@@ -17,6 +17,10 @@ public class ScientificArea {
 	
 	private String code;
 	
+	public ScientificArea() {
+		
+	}
+	
 	public ScientificArea(Long id, String name, String code) {
 		
 		this.id = id;

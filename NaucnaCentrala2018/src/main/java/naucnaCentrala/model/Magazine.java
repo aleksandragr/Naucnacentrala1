@@ -37,6 +37,13 @@ public class Magazine {
 	@ManyToMany
 	private Set<EditorReviewer> reviewers = new HashSet<>();
 	
+	private String merchant_id;
+	
+	private String merchant_password;
+	
+	private double amountMag;
+	
+	
 	public Magazine() {
 		
 		
@@ -45,7 +52,8 @@ public class Magazine {
 	
 
 	public Magazine(Long id, String name, String iSSNnumber, Set<ScientificArea> sections, String paymentMethod,
-			EditorReviewer mainEditor, Set<EditorReviewer> otherEditors, Set<EditorReviewer> reviewers) {
+			EditorReviewer mainEditor, Set<EditorReviewer> otherEditors, Set<EditorReviewer> reviewers,
+			String merchant_id, String merchant_password, double amountMag) {
 		
 		this.id = id;
 		this.name = name;
@@ -55,8 +63,13 @@ public class Magazine {
 		this.mainEditor = mainEditor;
 		this.otherEditors = otherEditors;
 		this.reviewers = reviewers;
+		this.merchant_id = merchant_id;
+		this.merchant_password = merchant_password;
+		this.amountMag = amountMag;
 	}
 
+
+	
 	
 
 	public String getName() {
@@ -132,6 +145,57 @@ public class Magazine {
 	public void setReviewers(Set<EditorReviewer> reviewers) {
 		this.reviewers = reviewers;
 	}
+
+
+	public Set<ScientificArea> getSections() {
+		return sections;
+	}
+
+
+	public void setSections(Set<ScientificArea> sections) {
+		this.sections = sections;
+	}
+
+
+	public String getMerchant_id() {
+		return merchant_id;
+	}
+
+
+	public void setMerchant_id(String merchant_id) {
+		this.merchant_id = merchant_id;
+	}
+
+
+	public String getMerchant_password() {
+		return merchant_password;
+	}
+
+
+	public void setMerchant_password(String merchant_password) {
+		this.merchant_password = merchant_password;
+	}
+
+
+
+
+
+
+	public double getAmountMag() {
+		return amountMag;
+	}
+
+
+
+
+
+
+	public void setAmountMag(double amountMag) {
+		this.amountMag = amountMag;
+	}
+
+
+	
 	
 
 }

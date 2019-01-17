@@ -12,9 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
-@Entity
+@Entity(name="user_author")
 public class User {
+
 
 
 
@@ -36,6 +38,9 @@ public class User {
 	@ManyToMany(fetch=FetchType.EAGER, cascade= CascadeType.MERGE)
 	private Set<Role> roles= new HashSet<>();
 	
+	@OneToOne
+	private MembershipFee membershipFee;
+	
 	public User() {
 		
 		
@@ -43,10 +48,8 @@ public class User {
 	}
 	
 
-
-
 	public User(Long id, String name, String surname, String city, String country, String email, boolean isAuthor,
-			String username, String password, String confirmP, Set<Role> roles) {
+			String username, String password, String confirmP, Set<Role> roles, MembershipFee membershipFee) {
 		
 		this.id = id;
 		this.name = name;
@@ -59,11 +62,8 @@ public class User {
 		this.password = password;
 		this.confirmP = confirmP;
 		this.roles = roles;
+		this.membershipFee = membershipFee;
 	}
-
-
-
-	
 
 
 
@@ -182,10 +182,18 @@ public class User {
 	}
 
 
-
-
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+
+	public MembershipFee getMembershipFee() {
+		return membershipFee;
+	}
+
+
+	public void setMembershipFee(MembershipFee membershipFee) {
+		this.membershipFee = membershipFee;
 	}
 
 

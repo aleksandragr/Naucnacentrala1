@@ -4,10 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import naucnaCentrala.model.Magazine;
+import naucnaCentrala.model.PaymentObj;
 
 @Repository
-public interface MagazineRepository extends JpaRepository<Magazine, Long>{
+public interface PaymentObjRepository extends JpaRepository<PaymentObj, Long>{
 	
-	Magazine findByIdEquals(Long id);
+	PaymentObj findByIdEquals(Long id);
 
 }

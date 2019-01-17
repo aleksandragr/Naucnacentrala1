@@ -3,11 +3,9 @@ package naucnaCentrala.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import naucnaCentrala.model.Magazine;
+import naucnaCentrala.model.MembershipFee;
 
 @Repository
-public interface MagazineRepository extends JpaRepository<Magazine, Long>{
-	
-	Magazine findByIdEquals(Long id);
+public interface MembershipFeeRepository extends JpaRepository<MembershipFee, Long>{
 
 }
