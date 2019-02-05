@@ -2,6 +2,7 @@ package naucnaCentrala.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,10 +10,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import static java.util.Collections.emptyList;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import naucnaCentrala.dto.UserDTO;
+import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.User;
 import naucnaCentrala.repository.UserRepository;
 
@@ -76,6 +84,60 @@ public class UserService implements UserDetailsService{
 		});
 		return authorities;
 		//return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
+	
+	public UserDTO getInfoOfUser() {
+		
+		UserDTO userdto = new UserDTO();
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username="";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		
+		User user = userRepository.findByUsername(username);
+		
+		userdto.setName(user.getName());
+		userdto.setSurname(user.getSurname());
+		userdto.setUsername(user.getUsername());
+		
+		MembershipFee mf = user.getMembershipFee();
+		
+		if(mf!=null) {
+			
+			String timeStamp = new SimpleDateFormat("dd.MM.yyyy.").format(Calendar.getInstance().getTime());
+			DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+			
+			Date now=null;
+			try {
+				now = formatter.parse(timeStamp);
+				} catch (ParseException e) {
+				  e.printStackTrace();
+				}
+			
+			if(!(now.compareTo(mf.getStartDate())>=0) || !(now.compareTo(mf.getEndDate())<=0)) {
+				userdto.setStartDate(null);
+				userdto.setEndDate(null);
+				userdto.setPrice(null);
+			}else {
+				userdto.setStartDate(mf.getStartDate());
+				userdto.setEndDate(mf.getEndDate());
+				userdto.setPrice(mf.getPrice());
+			}
+	
+		}
+		else {
+			userdto.setStartDate(null);
+			userdto.setEndDate(null);
+			userdto.setPrice(null);
+		}
+		
+		return userdto;
 	}
 	
 

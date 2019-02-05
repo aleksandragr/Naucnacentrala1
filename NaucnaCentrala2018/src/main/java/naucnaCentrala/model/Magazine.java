@@ -41,7 +41,7 @@ public class Magazine {
 	
 	private String merchant_password;
 	
-	private double amountMag;
+	private double amountmag;
 	
 	
 	public Magazine() {
@@ -65,7 +65,7 @@ public class Magazine {
 		this.reviewers = reviewers;
 		this.merchant_id = merchant_id;
 		this.merchant_password = merchant_password;
-		this.amountMag = amountMag;
+		this.amountmag = amountMag;
 	}
 
 
@@ -181,8 +181,8 @@ public class Magazine {
 
 
 
-	public double getAmountMag() {
-		return amountMag;
+	public double getAmountmag() {
+		return amountmag;
 	}
 
 
@@ -190,8 +190,8 @@ public class Magazine {
 
 
 
-	public void setAmountMag(double amountMag) {
-		this.amountMag = amountMag;
+	public void setAmountmag(double amountmag) {
+		this.amountmag = amountmag;
 	}
 
 

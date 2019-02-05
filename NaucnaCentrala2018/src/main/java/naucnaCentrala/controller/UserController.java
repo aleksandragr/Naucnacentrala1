@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import naucnaCentrala.dto.UserDTO;
 import naucnaCentrala.model.User;
 import naucnaCentrala.service.UserService;
 
@@ -51,6 +52,15 @@ public class UserController {
 		System.out.println("gagi ljubaviii");
 		return new ResponseEntity<>(HttpStatus.OK);
 		
+	}
+	
+	@PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
+	@GetMapping("/getInfo")
+	public ResponseEntity<UserDTO> getUserInfo(){
+		
+		UserDTO user = userService.getInfoOfUser();
+		
+		return new ResponseEntity<>(user,HttpStatus.OK);
 	}
 
 }

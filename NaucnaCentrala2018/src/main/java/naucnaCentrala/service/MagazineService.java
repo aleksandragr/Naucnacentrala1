@@ -41,6 +41,7 @@ public class MagazineService {
 		if(magazines==null) {
 			return null;
 		}
+		System.out.println(magazines.get(0).getAmountmag());
 		return magazines;
 	}
 	
@@ -82,9 +83,9 @@ public class MagazineService {
 					  e.printStackTrace();
 					}
 				
-				MembershipFee mf1 = user.getMembershipFee();
+				//MembershipFee mf1 = user.getMembershipFee();
 				
-				
+				/*
 				if(mf1==null || !(now.compareTo(mf1.getStartDate())>=0) || !(now.compareTo(mf1.getEndDate())<=0)) {
 					MembershipFee mf = new MembershipFee();
 					mf.setUser(user);
@@ -126,7 +127,9 @@ public class MagazineService {
 					System.out.println("ima vec clanarinu i vazeca je");
 					return "ima_clanarinu";
 				}
-						
+					*/	
+				
+				return null;
 				
 		}
 					

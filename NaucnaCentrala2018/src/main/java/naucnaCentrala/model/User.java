@@ -41,6 +41,9 @@ public class User {
 	@OneToOne
 	private MembershipFee membershipFee;
 	
+	@ManyToMany
+	private List<Magazine> magazine;
+	
 	public User() {
 		
 		
@@ -194,6 +197,16 @@ public class User {
 
 	public void setMembershipFee(MembershipFee membershipFee) {
 		this.membershipFee = membershipFee;
+	}
+
+
+	public List<Magazine> getMagazine() {
+		return magazine;
+	}
+
+
+	public void setMagazine(List<Magazine> magazine) {
+		this.magazine = magazine;
 	}
 
 

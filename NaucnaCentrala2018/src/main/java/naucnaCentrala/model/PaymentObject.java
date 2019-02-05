@@ -22,6 +22,16 @@ public class PaymentObject {
 	
 	private String merchantpassword;
 	
+	private String magazinename;
+	
+	private String payermail;
+	
+	private String successUrl;
+	
+	private String merchantmail;
+	
+	private String fronturl;
+	
 	
 	public PaymentObject() {
 		
@@ -73,6 +83,46 @@ public class PaymentObject {
 
 	public void setMerchantpassword(String merchantpassword) {
 		this.merchantpassword = merchantpassword;
+	}
+
+	public String getMagazinename() {
+		return magazinename;
+	}
+
+	public void setMagazinename(String magazinename) {
+		this.magazinename = magazinename;
+	}
+
+	public String getPayermail() {
+		return payermail;
+	}
+
+	public void setPayermail(String payermail) {
+		this.payermail = payermail;
+	}
+
+	public String getSuccessUrl() {
+		return successUrl;
+	}
+
+	public void setSuccessUrl(String successUrl) {
+		this.successUrl = successUrl;
+	}
+
+	public String getMerchantmail() {
+		return merchantmail;
+	}
+
+	public void setMerchantmail(String merchantmail) {
+		this.merchantmail = merchantmail;
+	}
+
+	public String getFronturl() {
+		return fronturl;
+	}
+
+	public void setFronturl(String fronturl) {
+		this.fronturl = fronturl;
 	}
 
 }
