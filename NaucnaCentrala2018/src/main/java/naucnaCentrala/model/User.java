@@ -41,8 +41,13 @@ public class User {
 	@OneToOne
 	private MembershipFee membershipFee;
 	
+	//lista kupljenih magazina
 	@ManyToMany
 	private List<Magazine> magazine;
+	
+	//lista kupljenih radova
+	@ManyToMany
+	private List<Labor> labor;
 	
 	public User() {
 		
@@ -207,6 +212,25 @@ public class User {
 
 	public void setMagazine(List<Magazine> magazine) {
 		this.magazine = magazine;
+	}
+
+
+	
+
+
+	public List<Labor> getLabor() {
+		return labor;
+	}
+
+
+	
+
+
+	
+
+
+	public void setLabor(List<Labor> labor) {
+		this.labor = labor;
 	}
 
 

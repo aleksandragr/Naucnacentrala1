@@ -14,5 +14,7 @@ public interface LaborRepository extends JpaRepository<Labor, Long>{
 	ArrayList<Labor> findByMagazine_idEquals(Long id);
 	
 	Labor findByIdEquals(Long id);
+	
+	Labor findByHeadingEquals(String heading);
 
 }

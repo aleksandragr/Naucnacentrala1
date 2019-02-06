@@ -116,19 +116,38 @@ public class PaymentObjectService {
 		Transaction t = transactionRepository.save(transaction);
 		
 		if(t.getDescription().contains("magazin") && t.getTitle().contains("magazin")) {
+			
 			User user = userRepository.findByUsername(t.getPayermail());
-		
+			
 			Magazine magazine = magazineRepository.findByMerchantIdEquals(t.getMerchantid());
-		
-			user.getMagazine().add(magazine);
-		
-			userRepository.save(user);
+			if(magazine!=null) {
+				
+				user.getMagazine().add(magazine);
+				
+				userRepository.save(user);
+			}
+			
 		}
 		else if(t.getDescription().contains("rad") && t.getTitle().contains("rad")){
 			
+			User user = userRepository.findByUsername(t.getPayermail());
+			
+			String[] delovi = t.getTitle().split("'");
+			
+			String rad = delovi[1];
+			
+			
+			Labor labor = laborRepository.findByHeadingEquals(rad);
+			
+			if(labor!=null) {
+				
+				user.getLabor().add(labor);
+				
+				userRepository.save(user);
+			}
 			
 		}
-				
+			
 	}
 	
 	public List<Transaction> getTrans(){

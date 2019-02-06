@@ -43,6 +43,10 @@ public class Magazine {
 	
 	private double amountmag;
 	
+	//PDF dokument
+	@OneToOne
+	private DBFile dbfile;
+	
 	
 	public Magazine() {
 		
@@ -192,6 +196,16 @@ public class Magazine {
 
 	public void setAmountmag(double amountmag) {
 		this.amountmag = amountmag;
+	}
+
+
+	public DBFile getDbfile() {
+		return dbfile;
+	}
+
+
+	public void setDbfile(DBFile dbfile) {
+		this.dbfile = dbfile;
 	}
 
 

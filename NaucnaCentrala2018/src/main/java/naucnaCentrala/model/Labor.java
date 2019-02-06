@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
+import javax.persistence.OneToOne;
 
 import naucnaCentrala.model.User;
 
@@ -23,10 +23,21 @@ public class Labor {
 	private String heading;
 	//private ArrayList<User> coauthors;
 	//private ArrayList<String> keyTerms;
-	private boolean isAbstract;
-	private String section;
+	
+	
+	@ManyToOne
+	private ScientificArea scientificarea;
+	
+	private String abstracttext;
+	
+	
 	//PDF dokument
+	@OneToOne
+	private DBFile dbfile;
+	
 	//konacna verzija rada
+	
+	
 	@ManyToOne
 	private Magazine magazine;
 	
@@ -63,21 +74,8 @@ public class Labor {
 		this.keyTerms = keyTerms;
 	}
 */
-	public boolean isAbstract() {
-		return isAbstract;
-	}
-
-	public void setAbstract(boolean isAbstract) {
-		this.isAbstract = isAbstract;
-	}
-
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
+	
+	
 
 	public Long getId() {
 		return id;
@@ -105,6 +103,36 @@ public class Labor {
 
 	public void setAmountlabor(double amountlabor) {
 		this.amountlabor = amountlabor;
+	}
+
+
+	public ScientificArea getScientificarea() {
+		return scientificarea;
+	}
+
+
+	public void setScientificarea(ScientificArea scientificarea) {
+		this.scientificarea = scientificarea;
+	}
+
+
+	public String getAbstracttext() {
+		return abstracttext;
+	}
+
+
+	public void setAbstracttext(String abstracttext) {
+		this.abstracttext = abstracttext;
+	}
+
+
+	public DBFile getDbfile() {
+		return dbfile;
+	}
+
+
+	public void setDbfile(DBFile dbfile) {
+		this.dbfile = dbfile;
 	}
 	
 
