@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import naucnaCentrala.dto.MagazineDTO;
 import naucnaCentrala.model.Magazine;
 import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.User;
@@ -34,15 +35,75 @@ public class MagazineService {
 	private MembershipFeeRepository membershipFeeRepository;
 	
 	
-	public ArrayList<Magazine> findAll(){
+	public ArrayList<MagazineDTO> findAll(){
 		
-		ArrayList<Magazine> magazines = (ArrayList<Magazine>) magazineRepository.findAll();
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username="";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		User user = userRepository.findByUsername(username);
+		
+		ArrayList<Magazine> magazines =  (ArrayList<Magazine>) magazineRepository.findAll();
 		
 		if(magazines==null) {
 			return null;
 		}
-		System.out.println(magazines.get(0).getAmountmag());
-		return magazines;
+		
+		ArrayList<MagazineDTO> m = new ArrayList<>();
+		
+		for(int i=0; i<magazines.size(); i++) {
+			MagazineDTO mag = new MagazineDTO();
+			mag.setId(magazines.get(i).getId());
+			mag.setName(magazines.get(i).getName());
+			mag.setISSNnumber(magazines.get(i).getISSNnumber());
+			mag.setMainEditor(magazines.get(i).getMainEditor().getName());
+			mag.setAmount(magazines.get(i).getAmountmag());
+			mag.setPaymentMethod(magazines.get(i).getPaymentMethod());
+			mag.setRole(user.getRoles().get(0).getDescription());
+			mag.setUrl("http://localhost:8083/dbfile/downloadFile="+magazines.get(i).getDbfile().getId());
+			
+			
+			
+			MembershipFee membershipfee = membershipFeeRepository.findByMagazine_idEqualsAndUser_idEquals(magazines.get(i).getId(), user.getId());
+			
+			if(membershipfee==null) {
+				mag.setValidmembership("invalid");
+			}
+			else {
+				
+				
+				//uzima sa trenutan datum
+				String timeStamp = new SimpleDateFormat("dd.MM.yyyy.").format(Calendar.getInstance().getTime());
+				DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+				
+				Date now=null;
+				try {
+					now = formatter.parse(timeStamp);
+					} catch (ParseException e) {
+					  e.printStackTrace();
+					}
+				
+				if(!(now.compareTo(membershipfee.getStartDate())>=0) || !(now.compareTo(membershipfee.getEndDate())<=0)) {
+					mag.setValidmembership("invalid");
+				}
+				else {
+					mag.setValidmembership("valid");
+				}
+						
+			}
+			
+			
+			m.add(mag);
+		}
+		
+
+		
+		return m;
 	}
 	
 	public String checkMembershipSomething(Long id) {//za pravljenje clanarine
@@ -135,7 +196,7 @@ public class MagazineService {
 					
 	}
 	
-	
+	/*
 	public String checkMembership(Long id) {
 		
 		Magazine magazine = magazineRepository.findByIdEquals(id);
@@ -183,6 +244,6 @@ public class MagazineService {
 			return "noopenaccess";//ne mora da plati
 		}
 
-	}
+	}*/
 
 }

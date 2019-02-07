@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity(name="user_author")
@@ -38,8 +39,7 @@ public class User {
 	@ManyToMany(fetch=FetchType.EAGER, cascade= CascadeType.MERGE)
 	private Set<Role> roles= new HashSet<>();
 	
-	@OneToOne
-	private MembershipFee membershipFee;
+	
 	
 	//lista kupljenih magazina
 	@ManyToMany
@@ -56,22 +56,6 @@ public class User {
 	}
 	
 
-	public User(Long id, String name, String surname, String city, String country, String email, boolean isAuthor,
-			String username, String password, String confirmP, Set<Role> roles, MembershipFee membershipFee) {
-		
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.city = city;
-		this.country = country;
-		this.email = email;
-		this.isAuthor = isAuthor;
-		this.username = username;
-		this.password = password;
-		this.confirmP = confirmP;
-		this.roles = roles;
-		this.membershipFee = membershipFee;
-	}
 
 
 
@@ -195,14 +179,7 @@ public class User {
 	}
 
 
-	public MembershipFee getMembershipFee() {
-		return membershipFee;
-	}
-
-
-	public void setMembershipFee(MembershipFee membershipFee) {
-		this.membershipFee = membershipFee;
-	}
+	
 
 
 	public List<Magazine> getMagazine() {
@@ -232,6 +209,11 @@ public class User {
 	public void setLabor(List<Labor> labor) {
 		this.labor = labor;
 	}
+
+
+
+
+
 
 
 }

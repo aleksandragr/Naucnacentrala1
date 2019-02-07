@@ -17,11 +17,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import naucnaCentrala.dto.UserDTO;
 import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.User;
+import naucnaCentrala.repository.MembershipFeeRepository;
 import naucnaCentrala.repository.UserRepository;
 
 @Service
@@ -32,6 +34,9 @@ public class UserService implements UserDetailsService{
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	private MembershipFeeRepository membershipFeeRepository;
 	
 	public String singUp(User user) {
 		
@@ -105,39 +110,35 @@ public class UserService implements UserDetailsService{
 		userdto.setName(user.getName());
 		userdto.setSurname(user.getSurname());
 		userdto.setUsername(user.getUsername());
-		
-		MembershipFee mf = user.getMembershipFee();
-		
-		if(mf!=null) {
 			
-			String timeStamp = new SimpleDateFormat("dd.MM.yyyy.").format(Calendar.getInstance().getTime());
-			DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-			
-			Date now=null;
-			try {
-				now = formatter.parse(timeStamp);
-				} catch (ParseException e) {
-				  e.printStackTrace();
-				}
-			
-			if(!(now.compareTo(mf.getStartDate())>=0) || !(now.compareTo(mf.getEndDate())<=0)) {
-				userdto.setStartDate(null);
-				userdto.setEndDate(null);
-				userdto.setPrice(null);
-			}else {
-				userdto.setStartDate(mf.getStartDate());
-				userdto.setEndDate(mf.getEndDate());
-				userdto.setPrice(mf.getPrice());
-			}
-	
-		}
-		else {
-			userdto.setStartDate(null);
-			userdto.setEndDate(null);
-			userdto.setPrice(null);
-		}
 		
 		return userdto;
+	}
+	
+	
+	public List<MembershipFee> getAllMF(){
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username="";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		
+		User user = userRepository.findByUsername(username);
+		
+		
+		List<MembershipFee> msf = membershipFeeRepository.findByUser_idEquals(user.getId());
+		
+		if(msf==null) {
+			return null;
+		}
+		
+		
+		return msf;
 	}
 	
 

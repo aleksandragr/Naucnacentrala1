@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,8 +22,6 @@ public class MembershipFee {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne
-	private User user;
 	
 	@JsonFormat(pattern="dd.MM.yyyy", shape=JsonFormat.Shape.STRING, timezone="Europe/Madrid")
 	private Date startDate;
@@ -30,22 +29,19 @@ public class MembershipFee {
 	@JsonFormat(pattern="dd.MM.yyyy", shape=JsonFormat.Shape.STRING, timezone="Europe/Madrid")
 	private Date endDate;
 	
-	private String price;
+	private double price;
+	
+	@ManyToOne
+	private Magazine magazine;
+	
+	@ManyToOne
+	private User user;
 	
 	public MembershipFee() {
 		
 		
 	}
 
-
-	public MembershipFee(Long id, User user, Date startDate, Date endDate, String price) {
-		
-		this.id = id;
-		this.user = user;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.price = price;
-	}
 
 
 	public Long getId() {
@@ -73,12 +69,24 @@ public class MembershipFee {
 		this.endDate = endDate;
 	}
 
-	public String getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(double price) {
 		this.price = price;
+	}
+
+
+
+	public Magazine getMagazine() {
+		return magazine;
+	}
+
+
+
+	public void setMagazine(Magazine magazine) {
+		this.magazine = magazine;
 	}
 
 
@@ -92,6 +100,9 @@ public class MembershipFee {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+
+
 
 
 }

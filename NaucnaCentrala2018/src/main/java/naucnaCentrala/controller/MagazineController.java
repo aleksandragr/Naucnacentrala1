@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import naucnaCentrala.dto.MagazineDTO;
 import naucnaCentrala.model.Magazine;
 import naucnaCentrala.service.MagazineService;
 
@@ -26,9 +27,9 @@ public class MagazineController {
 	
 	@PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
 	@GetMapping("/findAll")
-	public ResponseEntity<ArrayList<Magazine>> findAllMagazines (){
+	public ResponseEntity<ArrayList<MagazineDTO>> findAllMagazines (){
 		
-		ArrayList<Magazine> magazines = magazineService.findAll();
+		ArrayList<MagazineDTO> magazines = magazineService.findAll();
 		
 		return new ResponseEntity<>(magazines, HttpStatus.OK);
 	}
@@ -37,7 +38,7 @@ public class MagazineController {
 	@GetMapping("/checkMembership/{id}")
 	public ResponseEntity<String> checkMembership(@PathVariable Long id){
 		
-		String message = magazineService.checkMembership(id);
+		String message = null;//magazineService.checkMembership(id);
 		
 		return new ResponseEntity<>(message,HttpStatus.OK);
 	}

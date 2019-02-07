@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import naucnaCentrala.dto.LaborDTO;
 import naucnaCentrala.dto.PurchasedItemsDTO;
 import naucnaCentrala.model.Labor;
 import naucnaCentrala.service.LaborService;
@@ -25,10 +26,11 @@ public class LaborController {
 	@Autowired
 	private LaborService laborService;
 	
+	@PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
 	@GetMapping("/getLabors/{id}")
-	public ResponseEntity<List<Labor>> getLabors(@PathVariable Long id){
+	public ResponseEntity<List<LaborDTO>> getLabors(@PathVariable Long id){
 		
-		List<Labor> labors =laborService.getLabors(id);
+		List<LaborDTO> labors =laborService.getLabors(id);
 		
 		
 		return new ResponseEntity<>(labors, HttpStatus.OK);

@@ -1,7 +1,10 @@
 package naucnaCentrala.service;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,13 @@ import org.springframework.web.client.RestTemplate;
 
 import naucnaCentrala.model.Labor;
 import naucnaCentrala.model.Magazine;
+import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.PaymentObject;
 import naucnaCentrala.model.Transaction;
 import naucnaCentrala.model.User;
 import naucnaCentrala.repository.LaborRepository;
 import naucnaCentrala.repository.MagazineRepository;
+import naucnaCentrala.repository.MembershipFeeRepository;
 import naucnaCentrala.repository.TransactionRepository;
 import naucnaCentrala.repository.UserRepository;
 
@@ -39,6 +44,9 @@ public class PaymentObjectService {
 	
 	@Autowired
 	private LaborRepository laborRepository;
+	
+	@Autowired
+	private MembershipFeeRepository membershipFeeRepository;
 	
 	public String createPO(Long idm, String type) {
 		
@@ -62,9 +70,9 @@ public class PaymentObjectService {
 			PaymentObject po = new PaymentObject();
 			
 			if(type.equals("clanarina")) {
-				po.setAmount(1);
-				po.setDescription("Korisnik placa clanarinu u iznosu od 1EUR");
-				po.setTitle("Placanje clanarine");
+				po.setAmount(4);
+				po.setDescription("Korisnik placa clanarinu u iznosu od 4EUR");
+				po.setTitle("Placanje clanarine za '"+magazine.getName()+"'");
 				
 			}
 			else if(type.equals("magazin")) {
@@ -146,6 +154,84 @@ public class PaymentObjectService {
 				userRepository.save(user);
 			}
 			
+		}
+		else if(t.getDescription().contains("clan") && t.getTitle().contains("clan")) {
+			
+			User user = userRepository.findByUsername(t.getPayermail());
+			
+			Magazine magazine = magazineRepository.findByMerchantIdEquals(t.getMerchantid());
+			
+			if(user!=null && magazine!=null) {
+				
+				
+				MembershipFee membershipfee = membershipFeeRepository.findByMagazine_idEqualsAndUser_idEquals(user.getId(), magazine.getId());
+				
+				
+				if(membershipfee==null) {
+					
+					MembershipFee mf = new MembershipFee();
+					mf.setUser(user);
+					mf.setMagazine(magazine);
+					mf.setPrice(t.getAmount());
+					
+					//kad se formira clanarina kao pocetan datum uzima se trenutan datum
+					String timeStamp1 = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+					DateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+					Date startDate = null;
+					try {
+						startDate = formatter1.parse(timeStamp1);
+						} catch (ParseException e) {
+						  e.printStackTrace();
+						}
+					mf.setStartDate(startDate);
+					
+					//kad se formira clanarina kao krajnji datum uzima se trenutan datum+1 meseca
+					Calendar cal = Calendar.getInstance();
+					cal.add(Calendar.MONTH, +1);
+					Date end = cal.getTime();
+					String endString = formatter1.format(end);					
+					Date endDate=null;
+					try {
+						endDate = formatter1.parse(endString);
+						} catch (ParseException e) {
+						  e.printStackTrace();
+						}				
+					mf.setEndDate(endDate);
+					
+					membershipFeeRepository.save(mf);
+				}
+				else {
+					//danasnji datum
+					String timeStamp1 = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+					DateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+					Date startDate = null;
+					try {
+						startDate = formatter1.parse(timeStamp1);
+						} catch (ParseException e) {
+						  e.printStackTrace();
+						}
+					
+					membershipfee.setStartDate(startDate);
+					
+					//datum za 1 meseca
+					Calendar cal = Calendar.getInstance();
+					cal.add(Calendar.MONTH, +1);
+					Date end = cal.getTime();
+					String endString = formatter1.format(end);					
+					Date endDate=null;
+					try {
+						endDate = formatter1.parse(endString);
+						} catch (ParseException e) {
+						  e.printStackTrace();
+						}
+					
+					membershipfee.setEndDate(endDate);
+					
+					membershipFeeRepository.save(membershipfee);
+				}
+				
+				
+			}
 		}
 			
 	}

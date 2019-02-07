@@ -51,7 +51,7 @@ public class DataLoader implements ApplicationRunner{
 	    DBFile db = dbFileService.storeFile(multipartFile);
 		
 	    
-	    File file1 = new File(fpp + "Upravljacko – nadzorni sistem pogona za proizvodnju biodizela.pdf");
+	    File file1 = new File(fpp + "Upravljacko–nadzorni sistem pogona za proizvodnju biodizela.pdf");
 	    FileInputStream input1 = new FileInputStream(file1);
 	    MultipartFile multipartFile1 = new MockMultipartFile("file",
 	            file1.getName(), "application/pdf", IOUtils.toByteArray(input1));
@@ -114,6 +114,22 @@ public class DataLoader implements ApplicationRunner{
 	            file8.getName(), "application/pdf", IOUtils.toByteArray(input8));
 	     
 	    DBFile db8 = dbFileService.storeFile(multipartFile8);
+	    
+	    
+	    File file9 = new File(fpp + "Stomatoloski informator.pdf");
+	    FileInputStream input9 = new FileInputStream(file9);
+	    MultipartFile multipartFile9 = new MockMultipartFile("file",
+	            file9.getName(), "application/pdf", IOUtils.toByteArray(input9));
+	     
+	    DBFile db9 = dbFileService.storeFile(multipartFile9);
+	    
+	    
+	    File file10 = new File(fpp + "Rad1.pdf");
+	    FileInputStream input10 = new FileInputStream(file10);
+	    MultipartFile multipartFile10 = new MockMultipartFile("file",
+	            file10.getName(), "application/pdf", IOUtils.toByteArray(input10));
+	     
+	    DBFile db10 = dbFileService.storeFile(multipartFile10);
 	    
 	    
 	
