@@ -105,8 +105,25 @@ public class LaborService {
 			lab.setHeading(labors.get(i).getHeading());
 			lab.setAmount(labors.get(i).getAmountlabor());
 			lab.setPaymentMethod(labors.get(i).getMagazine().getPaymentMethod());		
-			lab.setUrl("http://localhost:8083/dbfile/downloadFile="+labors.get(i).getDbfile().getId());
+			lab.setUrl("http://localhost:8048/dbfile/downloadFile="+labors.get(i).getDbfile().getId());
 			lab.setValidmembership(valid);
+			
+			
+			
+			if(user.getLabor().size()!=0) {
+				for(int j=0; j<user.getLabor().size(); j++) {
+					if(labors.get(i).getHeading().equals(user.getLabor().get(j).getHeading())) {
+						lab.setBought("yes");
+						break;
+					}
+					else {
+						lab.setBought("no");
+					}			
+				}	
+			}
+			else {
+				lab.setBought("no");
+			}
 			
 			
 			l.add(lab);
@@ -139,7 +156,7 @@ public class LaborService {
 				PurchasedItemsDTO p = new PurchasedItemsDTO();
 				p.setName(magazines.get(i).getName());
 				p.setType("magazine");
-				p.setDownloadurl("http://localhost:8083/dbfile/downloadFile="+magazines.get(i).getDbfile().getId());
+				p.setDownloadurl("http://localhost:8048/dbfile/downloadFile="+magazines.get(i).getDbfile().getId());
 				items.add(p);
 			}
 		}
@@ -152,7 +169,7 @@ public class LaborService {
 				PurchasedItemsDTO p = new PurchasedItemsDTO();
 				p.setName(labors.get(j).getHeading());
 				p.setType("labor");
-				p.setDownloadurl("http://localhost:8083/dbfile/downloadFile="+labors.get(j).getDbfile().getId());
+				p.setDownloadurl("http://localhost:8048/dbfile/downloadFile="+labors.get(j).getDbfile().getId());
 				items.add(p);
 			}
 		}

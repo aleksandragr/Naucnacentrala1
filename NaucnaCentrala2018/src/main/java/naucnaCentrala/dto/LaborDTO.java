@@ -14,9 +14,21 @@ public class LaborDTO {
 	
 	private String validmembership;
 	
+	private String bought;
+	
+	
+
 	public LaborDTO() {
 		
 		
+	}
+	
+	public String getBought() {
+		return bought;
+	}
+
+	public void setBought(String bought) {
+		this.bought = bought;
 	}
 
 	public Long getId() {

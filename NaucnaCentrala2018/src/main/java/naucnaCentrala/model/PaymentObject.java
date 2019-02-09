@@ -32,7 +32,17 @@ public class PaymentObject {
 	
 	private String fronturl;
 	
+	private String bitcointoken;
 	
+	
+	public String getBitcointoken() {
+		return bitcointoken;
+	}
+
+	public void setBitcointoken(String bitcointoken) {
+		this.bitcointoken = bitcointoken;
+	}
+
 	public PaymentObject() {
 		
 	}

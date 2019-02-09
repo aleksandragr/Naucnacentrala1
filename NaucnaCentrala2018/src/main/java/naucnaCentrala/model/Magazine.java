@@ -47,7 +47,19 @@ public class Magazine {
 	@OneToOne
 	private DBFile dbfile;
 	
+	private String bitcointoken;
 	
+	
+	public String getBitcointoken() {
+		return bitcointoken;
+	}
+
+
+	public void setBitcointoken(String bitcointoken) {
+		this.bitcointoken = bitcointoken;
+	}
+
+
 	public Magazine() {
 		
 		

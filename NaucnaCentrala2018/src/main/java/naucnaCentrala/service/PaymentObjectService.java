@@ -1,5 +1,7 @@
 package naucnaCentrala.service;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,13 +103,31 @@ public class PaymentObjectService {
 			
 			po.setPayermail(username);
 			
-			po.setSuccessUrl("http://localhost:8083/payment/savetransaction");
-			po.setFronturl("http://localhost:8082/#/mainpage/magazines");
+			InetAddress ip;
+	        String hostname;
+	        try {
+	            ip = InetAddress.getLocalHost();
+	            hostname = ip.getHostName();
+	            String s =ip.toString();
+	            String s1 = s.split("/")[1];
+	            System.out.println("EVOOOO " + s1);
+	            po.setSuccessUrl("http://" + s1 + ":8048/payment/savetransaction");
+	            System.out.println("Your current IP address : " + ip);
+	            System.out.println("Your current Hostname : " + hostname);
+	 
+	        } catch (UnknownHostException e) {
+	 
+	            e.printStackTrace();
+	        }
+			
+			
+			po.setFronturl("http://localhost:8082/#/mainpage/profile");
+			po.setBitcointoken(magazine.getBitcointoken());
 
 			HttpHeaders header = new HttpHeaders();
 			HttpEntity entity = new HttpEntity(po,header);
 			
-			String response = restTemplate.postForObject("http://localhost:8051/objectpayment/savepaymentobject", entity, String.class);
+			String response = restTemplate.postForObject("http://192.168.0.26:8051/objectpayment/savepaymentobject", entity, String.class);
 			
 			
 			System.out.println("ID iz kp je : "+ response);
@@ -120,7 +140,7 @@ public class PaymentObjectService {
 	}
 	
 	public void savetrans(Transaction transaction) {
-		
+		System.out.println("SSSSSSSSSSSSSAAAAAA");
 		Transaction t = transactionRepository.save(transaction);
 		
 		if(t.getDescription().contains("magazin") && t.getTitle().contains("magazin")) {
@@ -254,11 +274,16 @@ public class PaymentObjectService {
 			return null;
 		}
 		
+		
 		for(int i=0; i<t.size(); i++) {
-			String d = t.get(i).getDatetime();
-			String[] delovi = d.split("T");
-			String[] delovi2 = delovi[1].split("\\+");			
-			t.get(i).setDatetime(delovi[0]+" "+delovi2[0]);
+			System.out.println(t.get(i).getType());
+			if(!(t.get(i).getType().equals("bank"))) {
+				String d = t.get(i).getDatetime();
+				String[] delovi = d.split("T");
+				String[] delovi2 = delovi[1].split("\\+");			
+				t.get(i).setDatetime(delovi[0]+" "+delovi2[0]);
+			}
+			
 		}
 		
 		
