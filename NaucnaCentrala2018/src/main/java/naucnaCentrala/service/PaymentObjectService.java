@@ -123,11 +123,13 @@ public class PaymentObjectService {
 			
 			po.setFronturl("http://localhost:8082/#/mainpage/profile");
 			po.setBitcointoken(magazine.getBitcointoken());
+			po.setClientId(magazine.getClientId());
+			po.setClientSecret(magazine.getClientSecret());
 
 			HttpHeaders header = new HttpHeaders();
 			HttpEntity entity = new HttpEntity(po,header);
 			
-			String response = restTemplate.postForObject("http://192.168.0.26:8051/objectpayment/savepaymentobject", entity, String.class);
+			String response = restTemplate.postForObject("http://192.168.43.174:8051/objectpayment/savepaymentobject", entity, String.class);
 			
 			
 			System.out.println("ID iz kp je : "+ response);
@@ -140,7 +142,7 @@ public class PaymentObjectService {
 	}
 	
 	public void savetrans(Transaction transaction) {
-		System.out.println("SSSSSSSSSSSSSAAAAAA");
+		System.out.println("SSSSSSSSSSSSSAAAAAA" + transaction.getType());
 		Transaction t = transactionRepository.save(transaction);
 		
 		if(t.getDescription().contains("magazin") && t.getTitle().contains("magazin")) {
