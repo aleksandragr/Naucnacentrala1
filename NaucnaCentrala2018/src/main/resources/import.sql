@@ -51,4 +51,10 @@ INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, 
 INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('8','Rad1','','4','3','3','11');
 
 
+INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('1','1');
+INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('1','2');
+INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('1','3');
+
+INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('2','4');
+INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('2','5');
 

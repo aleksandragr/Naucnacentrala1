@@ -2,6 +2,7 @@ package naucnaCentrala.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class Magazine {
 	private String ISSNnumber;
 	
 	@ManyToMany
-	private Set<ScientificArea> sections = new HashSet<>();
+	private List<ScientificArea> scientificArea;
 	private String paymentMethod;
 	
 	@OneToOne
@@ -71,22 +72,7 @@ public class Magazine {
 	}
 	
 
-	public Magazine(Long id, String name, String iSSNnumber, Set<ScientificArea> sections, String paymentMethod,
-			EditorReviewer mainEditor, Set<EditorReviewer> otherEditors, Set<EditorReviewer> reviewers,
-			String merchant_id, String merchant_password, double amountMag) {
-		
-		this.id = id;
-		this.name = name;
-		this.ISSNnumber = iSSNnumber;
-		this.sections = sections;
-		this.paymentMethod = paymentMethod;
-		this.mainEditor = mainEditor;
-		this.otherEditors = otherEditors;
-		this.reviewers = reviewers;
-		this.merchant_id = merchant_id;
-		this.merchant_password = merchant_password;
-		this.amountmag = amountMag;
-	}
+	
 
 
 	
@@ -167,13 +153,17 @@ public class Magazine {
 	}
 
 
-	public Set<ScientificArea> getSections() {
-		return sections;
+	
+
+
+
+	public List<ScientificArea> getScientificArea() {
+		return scientificArea;
 	}
 
 
-	public void setSections(Set<ScientificArea> sections) {
-		this.sections = sections;
+	public void setScientificArea(List<ScientificArea> scientificArea) {
+		this.scientificArea = scientificArea;
 	}
 
 
