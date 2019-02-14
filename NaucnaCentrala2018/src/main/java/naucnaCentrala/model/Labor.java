@@ -22,9 +22,19 @@ public class Labor {
 	
 	private String heading;
 	//private ArrayList<User> coauthors;
-	//private ArrayList<String> keyTerms;
+	private String keyTerms;
 	
 	
+	public String getKeyTerms() {
+		return keyTerms;
+	}
+
+
+	public void setKeyTerms(String keyTerms) {
+		this.keyTerms = keyTerms;
+	}
+
+
 	@ManyToOne
 	private ScientificArea scientificarea;
 	
@@ -43,6 +53,21 @@ public class Labor {
 	
 	private double amountlabor;
 	
+	private String state;
+	//verified - rad je provaren i prihvacen
+	//processing - rad se proverava
+	//rejected - rad je odbijen i proces se terminira
+	
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+
 	public Labor() {
 		
 		

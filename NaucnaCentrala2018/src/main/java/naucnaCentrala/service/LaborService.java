@@ -13,14 +13,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import naucnaCentrala.model.EditorReviewer;
 import naucnaCentrala.model.Labor;
 import naucnaCentrala.model.Magazine;
 import naucnaCentrala.model.MembershipFee;
+import naucnaCentrala.model.ScientificArea;
 import naucnaCentrala.model.User;
+import naucnaCentrala.repository.EditorReviewerRepository;
 import naucnaCentrala.repository.LaborRepository;
+import naucnaCentrala.repository.MagazineRepository;
 import naucnaCentrala.repository.MembershipFeeRepository;
+import naucnaCentrala.repository.ScientificAreaRepository;
 import naucnaCentrala.repository.UserRepository;
 import naucnaCentrala.dto.LaborDTO;
+import naucnaCentrala.dto.LaborESDTO;
 import naucnaCentrala.dto.PurchasedItemsDTO;
 
 @Service
@@ -34,6 +40,15 @@ public class LaborService {
 	
 	@Autowired
 	private MembershipFeeRepository membershipFeeRepository;
+	
+	@Autowired
+	private EditorReviewerRepository editorReviewerRepository;
+	
+	@Autowired
+	private ScientificAreaRepository scientificAreaRepository;
+	
+	@Autowired
+	private MagazineRepository magazineRepository;
 	
 	
 	public ArrayList<LaborDTO> getLabors(Long id){
@@ -49,6 +64,9 @@ public class LaborService {
 		}
 		
 		User user = userRepository.findByUsername(username);
+		
+		EditorReviewer er = editorReviewerRepository.findByUsername(username);
+		
 		
 		String valid="";
 		
@@ -107,23 +125,29 @@ public class LaborService {
 			lab.setPaymentMethod(labors.get(i).getMagazine().getPaymentMethod());		
 			lab.setUrl("http://localhost:8048/dbfile/downloadFile="+labors.get(i).getDbfile().getId());
 			lab.setValidmembership(valid);
-			
-			
-			
-			if(user.getLabor().size()!=0) {
-				for(int j=0; j<user.getLabor().size(); j++) {
-					if(labors.get(i).getHeading().equals(user.getLabor().get(j).getHeading())) {
-						lab.setBought("yes");
-						break;
-					}
-					else {
-						lab.setBought("no");
-					}			
-				}	
+			if(er!=null) {
+				lab.setRole(er.getRoles().get(0).getDescription());
 			}
-			else {
-				lab.setBought("no");
+			
+			
+			
+			if(user!=null) {
+				if(user.getLabor().size()!=0) {
+					for(int j=0; j<user.getLabor().size(); j++) {
+						if(labors.get(i).getHeading().equals(user.getLabor().get(j).getHeading())) {
+							lab.setBought("yes");
+							break;
+						}
+						else {
+							lab.setBought("no");
+						}			
+					}	
+				}
+				else {
+					lab.setBought("no");
+				}
 			}
+			
 			
 			
 			l.add(lab);
@@ -177,6 +201,44 @@ public class LaborService {
 		
 		
 		return items;
+	}
+	
+	public Long addL(LaborESDTO dto) {
+		
+		Labor l = new Labor();
+		
+		l.setHeading(dto.getLaborname());
+		l.setAbstracttext(dto.getAbstractt());
+		
+		if(dto.getScientificareaid()!=null) {
+			ScientificArea s = scientificAreaRepository.findByIdEquals(dto.getScientificareaid());
+			l.setScientificarea(s);
+		}
+		
+		if(dto.getMagazineid()!=null) {
+			Magazine m = magazineRepository.findByIdEquals(dto.getMagazineid());
+			l.setMagazine(m);
+		}
+		
+		String terms = "";
+		for(int i=0;i<dto.getKeyterms().size();i++) {
+			 
+			 if(i==(dto.getKeyterms().size()-1)) {
+				 terms = terms+dto.getKeyterms().get(i);
+			 }
+			 else {
+				 terms = terms + dto.getKeyterms().get(i) + ",";
+			 }
+		}
+		l.setKeyTerms(terms);
+		l.setState("processing");
+		Labor saveL = laborRepository.save(l);
+		
+		if(saveL==null) {
+			return null;
+		}
+		
+		return saveL.getId();
 	}
 
 }

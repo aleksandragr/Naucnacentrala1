@@ -15,9 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import naucnaCentrala.dto.MagazineDTO;
+import naucnaCentrala.model.EditorReviewer;
 import naucnaCentrala.model.Magazine;
 import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.User;
+import naucnaCentrala.repository.EditorReviewerRepository;
 import naucnaCentrala.repository.MagazineRepository;
 import naucnaCentrala.repository.MembershipFeeRepository;
 import naucnaCentrala.repository.UserRepository;
@@ -34,6 +36,9 @@ public class MagazineService {
 	@Autowired
 	private MembershipFeeRepository membershipFeeRepository;
 	
+	@Autowired
+	private EditorReviewerRepository editorReviewerRepository;
+	
 	
 	public ArrayList<MagazineDTO> findAll(){
 		
@@ -47,6 +52,8 @@ public class MagazineService {
 		}
 		
 		User user = userRepository.findByUsername(username);
+		
+		EditorReviewer er = editorReviewerRepository.findByUsername(username);
 		
 		ArrayList<Magazine> magazines =  (ArrayList<Magazine>) magazineRepository.findAll();
 		
@@ -64,59 +71,69 @@ public class MagazineService {
 			mag.setMainEditor(magazines.get(i).getMainEditor().getName());
 			mag.setAmount(magazines.get(i).getAmountmag());
 			mag.setPaymentMethod(magazines.get(i).getPaymentMethod());
-			mag.setRole(user.getRoles().get(0).getDescription());
 			mag.setUrl("http://localhost:8048/dbfile/downloadFile="+magazines.get(i).getDbfile().getId());
-			
-			
-			
-			MembershipFee membershipfee = membershipFeeRepository.findByMagazine_idEqualsAndUser_idEquals(magazines.get(i).getId(), user.getId());
-			
-			if(membershipfee==null) {
-				mag.setValidmembership("invalid");
+			if(user!=null) {
+				mag.setRole(user.getRoles().get(0).getDescription());
+				
 			}
-			else {
+			if(er!=null) {
+				mag.setRole(er.getRoles().get(0).getDescription());
+			}
+			
+			
+			
+			if(user!=null) {
+				MembershipFee membershipfee = membershipFeeRepository.findByMagazine_idEqualsAndUser_idEquals(magazines.get(i).getId(), user.getId());
 				
-				
-				//uzima sa trenutan datum
-				String timeStamp = new SimpleDateFormat("dd.MM.yyyy.").format(Calendar.getInstance().getTime());
-				DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-				
-				Date now=null;
-				try {
-					now = formatter.parse(timeStamp);
-					} catch (ParseException e) {
-					  e.printStackTrace();
-					}
-				
-				if(!(now.compareTo(membershipfee.getStartDate())>=0) || !(now.compareTo(membershipfee.getEndDate())<=0)) {
+				if(membershipfee==null) {
 					mag.setValidmembership("invalid");
 				}
 				else {
-					mag.setValidmembership("valid");
-				}
-						
-			}
-			
-			if(user.getMagazine().size()!=0) {
-				for(int j=0; j<user.getMagazine().size(); j++) {
-					if(magazines.get(i).getMerchant_id().equals(user.getMagazine().get(j).getMerchant_id())) {
-						System.out.println("iffff");
-						mag.setBought("yes");
-						break;
+					
+					
+					//uzima sa trenutan datum
+					String timeStamp = new SimpleDateFormat("dd.MM.yyyy.").format(Calendar.getInstance().getTime());
+					DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+					
+					Date now=null;
+					try {
+						now = formatter.parse(timeStamp);
+						} catch (ParseException e) {
+						  e.printStackTrace();
+						}
+					
+					if(!(now.compareTo(membershipfee.getStartDate())>=0) || !(now.compareTo(membershipfee.getEndDate())<=0)) {
+						mag.setValidmembership("invalid");
 					}
 					else {
-						System.out.println("elseee");
-						mag.setBought("no");
+						mag.setValidmembership("valid");
+					}
+							
+				}
+				
+				if(user.getMagazine().size()!=0) {
+					for(int j=0; j<user.getMagazine().size(); j++) {
+						if(magazines.get(i).getMerchant_id().equals(user.getMagazine().get(j).getMerchant_id())) {
+							System.out.println("iffff");
+							mag.setBought("yes");
+							break;
+						}
+						else {
+							System.out.println("elseee");
+							mag.setBought("no");
+						}
 					}
 				}
-			}
-			else {
-				System.out.println("odma else");
-				mag.setBought("no");
+				else {
+					System.out.println("odma else");
+					mag.setBought("no");
+				}
+				
+				
+				System.out.println(mag.getBought());
 			}
 			
 			
-			System.out.println(mag.getBought());
 			
 			m.add(mag);
 		}

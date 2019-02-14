@@ -1,11 +1,17 @@
 package naucnaCentrala.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import naucnaCentrala.model.Magazine;
 
@@ -38,6 +44,12 @@ public class EditorReviewer {
 	private String username;
 	private String password;
 	
+	
+	@ManyToMany(fetch=FetchType.EAGER, cascade= CascadeType.MERGE)
+	private Set<Role> roles= new HashSet<>();
+	
+	
+	
 	public EditorReviewer() {
 		
 		
@@ -61,6 +73,19 @@ public class EditorReviewer {
 		this.password = password;
 	}
 	
+
+	public List<Role> getRoles() {
+		List<Role> role = new ArrayList<>(roles);
+		if(role.size()>0) {
+			return role;
+		}
+		return null;
+	}
+
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 
 
 	public String getName() {

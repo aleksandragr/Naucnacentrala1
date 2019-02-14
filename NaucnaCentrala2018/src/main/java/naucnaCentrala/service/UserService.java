@@ -21,8 +21,10 @@ import java.util.List;
 import java.util.Set;
 
 import naucnaCentrala.dto.UserDTO;
+import naucnaCentrala.model.EditorReviewer;
 import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.User;
+import naucnaCentrala.repository.EditorReviewerRepository;
 import naucnaCentrala.repository.MembershipFeeRepository;
 import naucnaCentrala.repository.UserRepository;
 
@@ -37,6 +39,9 @@ public class UserService implements UserDetailsService{
 	
 	@Autowired
 	private MembershipFeeRepository membershipFeeRepository;
+	
+	@Autowired
+	private EditorReviewerRepository editorReviewerRepository;
 	
 	public String singUp(User user) {
 		
@@ -56,11 +61,16 @@ public class UserService implements UserDetailsService{
 			}
 		}
 		
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));		
-		long id = user.getRoles().get(0).getId();
-		if(id==2) {
-			user.setAuthor(true);
-		}
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));	
+		/*System.out.println("aaaaa "+user.getRoles().get(0));
+		if(user.getRoles().get(0).getId()!=null) {
+			System.out.println("eeee");
+			long id = user.getRoles().get(0).getId();
+			if(id==2) {
+				user.setAuthor(true);
+			}
+		}*/
+		
 		
 		User u = userRepository.save(user);		
 		return "Successful registration!";
@@ -73,12 +83,27 @@ public class UserService implements UserDetailsService{
 		
 		User user = userRepository.findByUsername(username);		
 		if(user == null) {
-			throw new UsernameNotFoundException(username);
+			EditorReviewer er = editorReviewerRepository.findByUsername(username);
+			if(er==null) {
+				throw new UsernameNotFoundException(username);
+			}
+			return new org.springframework.security.core.userdetails.User(er.getUsername(), er.getPassword(), getAuthority(er));
 		}
 		
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
 	}
 	
+	
+	private Set<SimpleGrantedAuthority> getAuthority(EditorReviewer user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        
+		user.getRoles().forEach(role -> {
+			//authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+		});
+		return authorities;
+		//return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
 	
 	private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
