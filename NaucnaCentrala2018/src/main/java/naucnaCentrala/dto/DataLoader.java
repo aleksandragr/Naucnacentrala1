@@ -3,20 +3,13 @@ package naucnaCentrala.dto;
 import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-//import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.stereotype.Component;
+
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -24,11 +17,18 @@ import naucnaCentrala.model.DBFile;
 import naucnaCentrala.repository.DBFileRepository;
 import naucnaCentrala.service.DBFileService;
 
+
+
+
+
 @Component
 public class DataLoader implements ApplicationRunner{
 	
+	//@Autowired
+	//private DBFileRepository dbFileRepository;
+	
 	@Autowired
-	private DBFileRepository dbFileRepository;
+	private DBFileRepository dBFileRepository;
 	
 	@Autowired
 	private DBFileService dbFileService;

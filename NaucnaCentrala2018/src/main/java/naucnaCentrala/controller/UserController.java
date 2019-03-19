@@ -32,8 +32,7 @@ public class UserController {
 	
 	@PostMapping("/sign-up")
 	public ResponseEntity<String> singUp(@RequestBody User user) {
-		System.out.println("sign-up");
-		System.out.println(user.getRoles().size());
+		
 		String user1 = userService.singUp(user);
 		if(user1==null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -52,12 +51,12 @@ public class UserController {
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/gagi")
 	public ResponseEntity<HttpStatus> proba() {
-		System.out.println("gagi ljubaviii");
+		
 		return new ResponseEntity<>(HttpStatus.OK);
 		
 	}
 	
-	@PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
+	@PreAuthorize("hasRole('USER') or hasRole('AUTHOR') or hasRole('EDITOR') or hasRole('REVIEWER')")
 	@GetMapping("/getInfo")
 	public ResponseEntity<UserDTO> getUserInfo(){
 		

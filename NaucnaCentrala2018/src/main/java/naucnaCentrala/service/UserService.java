@@ -23,6 +23,7 @@ import java.util.Set;
 import naucnaCentrala.dto.UserDTO;
 import naucnaCentrala.model.EditorReviewer;
 import naucnaCentrala.model.MembershipFee;
+import naucnaCentrala.model.Role;
 import naucnaCentrala.model.User;
 import naucnaCentrala.repository.EditorReviewerRepository;
 import naucnaCentrala.repository.MembershipFeeRepository;
@@ -46,7 +47,7 @@ public class UserService implements UserDetailsService{
 	public String singUp(User user) {
 		
 		ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
-		System.out.println("aaaa");
+		
 		for(int i=0; i<users.size(); i++) {
 			if(users.get(i).getUsername().equals(user.getUsername())) {				
 				//return "User with this username exists!";
@@ -122,19 +123,29 @@ public class UserService implements UserDetailsService{
 		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username="";
+		Role role= new Role();
 
 		if (principal instanceof UserDetails) {
 			username = ((UserDetails)principal).getUsername();
+			
 		} else {
 			username = principal.toString();
 		}
 		
 		
 		User user = userRepository.findByUsername(username);
+		if(user!=null) {
+			userdto.setName(user.getName());
+			userdto.setSurname(user.getSurname());
+			userdto.setUsername(user.getUsername());
+		}
 		
-		userdto.setName(user.getName());
-		userdto.setSurname(user.getSurname());
-		userdto.setUsername(user.getUsername());
+		EditorReviewer er = editorReviewerRepository.findByUsername(username);
+		if(er!=null) {
+			userdto.setName(er.getName());
+			userdto.setSurname(er.getSurname());
+			userdto.setUsername(er.getUsername());
+		}
 			
 		
 		return userdto;
@@ -154,16 +165,21 @@ public class UserService implements UserDetailsService{
 		
 		
 		User user = userRepository.findByUsername(username);
+		List<MembershipFee> msf = new ArrayList<>();
 		
-		
-		List<MembershipFee> msf = membershipFeeRepository.findByUser_idEquals(user.getId());
-		
-		if(msf==null) {
-			return null;
+		if(user!=null) {
+			msf= membershipFeeRepository.findByUser_idEquals(user.getId());
+			
+			if(msf==null) {
+				return null;
+			}
+			
+
 		}
 		
 		
 		return msf;
+		
 	}
 	
 

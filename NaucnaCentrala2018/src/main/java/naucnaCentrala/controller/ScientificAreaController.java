@@ -2,6 +2,9 @@ package naucnaCentrala.controller;
 
 import java.util.List;
 
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +26,23 @@ public class ScientificAreaController {
 	@Autowired
 	private ScientificAreaService scientificAreaService;
 	
+	@Autowired
+	private TaskService taskService;
+	
+	@Autowired
+	private RuntimeService runtimeService;
+	
 	
 	@PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
-	@GetMapping("/getSA/{id}")
-	public ResponseEntity<List<ScientificArea>> getSAofMagazine(@PathVariable Long id){
+	@GetMapping("/getSA/{taskid}")
+	public ResponseEntity<List<ScientificArea>> getSAofMagazine(@PathVariable String taskid){
+		System.out.println(taskid);
+		Task task = taskService.createTaskQuery().taskId(taskid).singleResult();
+		String processId=task.getProcessInstanceId();
 		
+		String magazinId= runtimeService.getVariable(processId, "idMagazina").toString();
+		Long id = Long.parseLong(magazinId);
+		System.out.println(id+ "    id jeeeeeee\n");
 		List<ScientificArea> sca = scientificAreaService.getSA(id);
 		
 		if(sca==null) {

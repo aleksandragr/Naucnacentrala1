@@ -114,23 +114,23 @@ public class MagazineService {
 				if(user.getMagazine().size()!=0) {
 					for(int j=0; j<user.getMagazine().size(); j++) {
 						if(magazines.get(i).getMerchant_id().equals(user.getMagazine().get(j).getMerchant_id())) {
-							System.out.println("iffff");
+							
 							mag.setBought("yes");
 							break;
 						}
 						else {
-							System.out.println("elseee");
+							
 							mag.setBought("no");
 						}
 					}
 				}
 				else {
-					System.out.println("odma else");
+					
 					mag.setBought("no");
 				}
 				
 				
-				System.out.println(mag.getBought());
+				
 			}
 			
 			

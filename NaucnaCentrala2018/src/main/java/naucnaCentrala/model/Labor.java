@@ -21,12 +21,22 @@ public class Labor {
 	private Long id;
 	
 	private String heading;
-	//private ArrayList<User> coauthors;
+	private String coauthors;
 	private String keyTerms;
 	
 	
 	public String getKeyTerms() {
 		return keyTerms;
+	}
+
+
+	public String getCoauthors() {
+		return coauthors;
+	}
+
+
+	public void setCoauthors(String coauthors) {
+		this.coauthors = coauthors;
 	}
 
 

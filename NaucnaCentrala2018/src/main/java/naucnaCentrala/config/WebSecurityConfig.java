@@ -51,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/token/*", "/user/sign-up","/paymentobj/getPaymentObj/*").permitAll()
                 .antMatchers("/payment/savetransaction").permitAll()
                 .antMatchers("/dbfile/*").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/app/welcome/*").permitAll()
+                //.anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

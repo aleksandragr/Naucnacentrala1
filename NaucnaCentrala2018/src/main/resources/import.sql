@@ -1,11 +1,11 @@
-INSERT INTO `nc`.`editor_reviewer` (`id`, `name`, `is_editor`, `is_reviewer`, `username`, `password`, `email`) VALUES ('1','Pera',1,1,'pera','$2a$10$C3Csh880Volm4lDyaXPIf.KbaeLZEmPNQhbiCLmBJblYLApxVvkk6','donthavename3478@gmail.com');
+INSERT INTO `nc`.`editor_reviewer` (`id`, `name`, `is_editor`, `is_reviewer`, `username`, `password`, `email`, `surname`) VALUES ('1','Pera',1,1,'pera','$2a$10$C3Csh880Volm4lDyaXPIf.KbaeLZEmPNQhbiCLmBJblYLApxVvkk6','donthavename3478@gmail.com','Peric');
 
-INSERT INTO `nc`.`editor_reviewer` (`id`, `name`, `is_editor`, `is_reviewer`, `username`, `password`, `email`) VALUES ('2','Mika',0,1,'mika','$2a$10$zg1MJVAesqU5dTR5icBqLuF./O1hEZ23mGea0BffNdqVk/uOctgVa','donthavename3478@gmail.com');
+INSERT INTO `nc`.`editor_reviewer` (`id`, `name`, `is_editor`, `is_reviewer`, `username`, `password`, `email`, `surname`) VALUES ('2','Mika',1,1,'mika','$2a$10$zg1MJVAesqU5dTR5icBqLuF./O1hEZ23mGea0BffNdqVk/uOctgVa','donthavename3478@gmail.com','Mikic');
 
 INSERT INTO `nc`.`magazine` (`id`, `name`, `main_editor_id`, `payment_method`, `issnnumber`, `merchant_id`, `merchant_password`, `amountmag`, `dbfile_id`, `bitcointoken`, `client_id`, `client_secret`) VALUES ('1','Hemijska industrija','1','no open-access','0367-598X','977MHIik87?9iuT7ug%RFhu5d./','password@1',2,'8','qzBsz_brLvJz-pqaSJoiJLPCtfEB4gLfx6ppqJgF','AZtrQ1uCTTPMt5O7dW85gDol7yrOFyKVOrsNBA_Wg5LVa4hRS4PqyN_DYhcJ9VECXozuuPdfoLaEeNk7','EOqa9RNchmILmCz-k_VEy8JwRQBxypMMOlCcZa6ZEXFMHS-E_KjDz-6vHNYZ-9_anhBAxfShmO_y87Eg');
 INSERT INTO `nc`.`magazine` (`id`, `name`, `main_editor_id`, `payment_method`, `issnnumber`, `merchant_id`, `merchant_password`, `amountmag`, `dbfile_id`, `bitcointoken`, `client_id`, `client_secret`) VALUES ('2','Zastita materijala', '2','no open-access','0351-9465','411BNG5dryh654f6j/9hrEEESX0','password@2',3,'9','av5sS6kdwu2Kn7_gsbBoxHFxuwfNyRvzpEFhMvHP','AShgvwXsTGRklfK9XbnpTFI1Izbxmr9ZTko1bvdsb8K7W0giKmIRGD0aN9cxpI-GiNf3v16JL8lQIAKC','EN99azhDWWQ9ErDYhzpKtJcQkk7bC-ZFbXDLy-RDZvGtC4dBvPVu6YOZSiL6koWOfB_lcZZGj1whZbRe');
 
-INSERT INTO `nc`.`magazine` (`id`, `name`, `main_editor_id`, `payment_method`, `issnnumber`, `merchant_id`, `merchant_password`, `amountmag`, `dbfile_id`, `bitcointoken`, `client_id`, `client_secret`) VALUES ('3','Stomatoloski informator', '2','open-access','1451-3439','411BNG5dryh654f6j/9hroooooo','password@3',1,'10','HZduitZqgbPHAYXHEkP27UViDbfbxEs2ct7ER4C_','AWiC5_aNn8KZOJwdgrTPiKpA_KLXV3hAChnsbB2iVokalArW__hRkJkCTvWhoq4fDPhZzTwdmDUqMzrR','EIxn6-h5lDVEOMEteW-7IcTZ6JQlN9niGGRp82gwUiS3pMy47LTujZwWRgUpTLFVaeP237JeF4GaHOeV');
+INSERT INTO `nc`.`magazine` (`id`, `name`, `main_editor_id`, `payment_method`, `issnnumber`, `merchant_id`, `merchant_password`, `amountmag`, `dbfile_id`, `bitcointoken`, `client_id`, `client_secret`) VALUES ('3','Stomatoloski informator', '1','open-access','1451-3439','411BNG5dryh654f6j/9hroooooo','password@3',1,'10','HZduitZqgbPHAYXHEkP27UViDbfbxEs2ct7ER4C_','AWiC5_aNn8KZOJwdgrTPiKpA_KLXV3hAChnsbB2iVokalArW__hRkJkCTvWhoq4fDPhZzTwdmDUqMzrR','EIxn6-h5lDVEOMEteW-7IcTZ6JQlN9niGGRp82gwUiS3pMy47LTujZwWRgUpTLFVaeP237JeF4GaHOeV');
 
 
 INSERT INTO `nc`.`magazine_other_editors` (`magazine_id`, `other_editors_id`) VALUES ('1','2');
@@ -19,6 +19,7 @@ INSERT INTO `nc`.`scientific_area` (`id`, `code`, `name`) VALUES ('3','PRH','Pri
 INSERT INTO `nc`.`scientific_area` (`id`, `code`, `name`) VALUES ('4','FIZ','Fizika');
 INSERT INTO `nc`.`scientific_area` (`id`, `code`, `name`) VALUES ('5','HEM','Hemija');
 
+INSERT INTO `nc`.`scientific_area` (`id`, `code`, `name`) VALUES ('6','STO','Stomatologija');
 
 INSERT INTO `nc`.`magazine_sections` (`magazine_id`, `sections_id`) VALUES ('1','1');
 INSERT INTO `nc`.`magazine_sections` (`magazine_id`, `sections_id`) VALUES ('1','2');
@@ -34,7 +35,7 @@ INSERT INTO `nc`.`user_author` (`id`, `username`, `password`, `is_author`, `name
 
 
 
-INSERT INTO `nc`.`membership_fee` (`id`, `start_date`, `end_date`, `price`, `magazine_id`, `user_id`) VALUES ('1','2018.12.23.','2019.02.11.','1','1','1');
+INSERT INTO `nc`.`membership_fee` (`id`, `start_date`, `end_date`, `price`, `magazine_id`, `user_id`) VALUES ('1','2018.02.28.','2019.03.30.','1','3','1');
 
 
 INSERT INTO `nc`.`user_author_roles` (`user_author_id`, `roles_id`) VALUES ('1','2');
@@ -64,4 +65,6 @@ INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`
 
 INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('2','4');
 INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('2','5');
+
+INSERT INTO `nc`.`magazine_scientific_area` (`magazine_id`, `scientific_area_id`) VALUES ('3','6');
 

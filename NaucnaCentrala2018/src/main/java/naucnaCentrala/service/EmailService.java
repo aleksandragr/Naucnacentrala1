@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import naucnaCentrala.model.EditorReviewer;
+import naucnaCentrala.model.Labor;
 import naucnaCentrala.model.User;
 
 
@@ -24,36 +25,36 @@ public class EmailService {
 	
 	
 	
-	public void sendUser(User user) throws MailException, InterruptedException {
+	public void sendUser(User user, Labor l) throws MailException, InterruptedException {
 		
-		System.out.println("aloo glavonja");
+		
 		
 		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo("grujica995@gmail.com");
+		email.setTo(user.getEmail());
 		email.setFrom(env.getProperty("spring.mail.username"));
 		System.out.println(user.getEmail());
-		email.setSubject("Poziv na predstavu/film");
-		System.out.println("aaaaaa");
-		String text = "Salje se mejl"+user.getName();
-		System.out.println("bbbbbb");	
+		email.setSubject("Prijava novog rada");
+		
+		String text = "Obavestava se autor "+user.getName()+" "+user.getSurname()+" da se prijavljuje novi rad pod nazivom '"+l.getHeading()+"' u casopis '"+l.getMagazine().getName()+"'.";
+		
 		email.setText(text);
-		System.out.println("cccccccc");
+		
 		javaMailSender.send(email);
-		System.out.println("ddddd");
+		
 		
 	}
-	/*
 	
-	public void sendER(EditorReviewer er) throws MailException, InterruptedException {
+	
+	public void sendER(EditorReviewer er, Labor l) throws MailException, InterruptedException {
 		
-		System.out.println("aloo glavonja");
+		
 		
 		SimpleMailMessage email = new SimpleMailMessage();
 		email.setTo(er.getEmail());
 		email.setFrom(env.getProperty("spring.mail.username"));
 		System.out.println(er.getEmail());
-		email.setSubject("Poziv na predstavu/film");
-		String text = "Salje se mejl"+er.getName();
+		email.setSubject("Prijava novog rada");
+		String text = "Obavestava se glavni urednik "+er.getName()+" "+er.getSurname()+" casopisa '"+l.getMagazine().getName()+"' da se prijavljuje novi rad pod nazivom '"+l.getHeading()+"' u casopis '"+l.getMagazine().getName()+"'.";
 				
 		email.setText(text);
 		
@@ -61,6 +62,6 @@ public class EmailService {
 		
 		
 	}
-	*/
+	
 
 }

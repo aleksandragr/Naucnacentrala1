@@ -1,11 +1,53 @@
 package naucnaCentrala.dto;
 
+import naucnaCentrala.model.DBFile;
+
 public class LaborDTO {
 	
 	private Long id;
 	
 	private String heading;
 	
+	private String keyTerms;
+	
+	private String scientificarea;
+	
+	private String abstracttext;
+	
+	private String dbfile;
+	
+	public String getKeyTerms() {
+		return keyTerms;
+	}
+
+	public void setKeyTerms(String keyTerms) {
+		this.keyTerms = keyTerms;
+	}
+
+	public String getScientificarea() {
+		return scientificarea;
+	}
+
+	public void setScientificarea(String scientificarea) {
+		this.scientificarea = scientificarea;
+	}
+
+	public String getAbstracttext() {
+		return abstracttext;
+	}
+
+	public void setAbstracttext(String abstracttext) {
+		this.abstracttext = abstracttext;
+	}
+
+	public String getDbfile() {
+		return dbfile;
+	}
+
+	public void setDbfile(String dbfile) {
+		this.dbfile = dbfile;
+	}
+
 	private double amount;
 	
 	private String url;

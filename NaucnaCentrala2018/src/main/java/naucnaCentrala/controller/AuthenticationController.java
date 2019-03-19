@@ -30,14 +30,14 @@ public class AuthenticationController {
 	
 	@RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody User loginUser) throws AuthenticationException {
-		System.out.println("usao");
+		
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getUsername(),
                         loginUser.getPassword()
                 )
         );
-        System.out.println("stiga ovde "+loginUser.getUsername() );
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
         return ResponseEntity.ok(new AuthToken(token));

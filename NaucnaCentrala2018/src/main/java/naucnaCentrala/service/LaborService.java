@@ -6,8 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,6 +55,12 @@ public class LaborService {
 	
 	@Autowired
 	private MagazineRepository magazineRepository;
+	
+	@Autowired
+	private TaskService taskService;
+	
+	@Autowired
+	private RuntimeService runtimeService;
 	
 	
 	public ArrayList<LaborDTO> getLabors(Long id){
@@ -211,7 +223,9 @@ public class LaborService {
 		l.setAbstracttext(dto.getAbstractt());
 		
 		if(dto.getScientificareaid()!=null) {
+			
 			ScientificArea s = scientificAreaRepository.findByIdEquals(dto.getScientificareaid());
+			
 			l.setScientificarea(s);
 		}
 		
@@ -239,6 +253,28 @@ public class LaborService {
 		}
 		
 		return saveL.getId();
+	}
+	
+	public void addLaborTask(Labor labor, String taskId) {
+		System.out.println("ovde lepim podatke za camundu");
+		
+		Map<String, Object> variables = new HashMap<>();
+		
+		
+		variables.put("nazivrada",labor.getHeading());
+		variables.put("koautori", labor.getCoauthors());
+		variables.put("kljucnereci", labor.getKeyTerms());
+		variables.put("naucnaoblast",labor.getScientificarea().getName());
+		variables.put("abstrakt", labor.getAbstracttext());
+		variables.put("pdf", "http://localhost:8048/dbfile/downloadFile="+labor.getDbfile().getId());
+		variables.put("maineditor", labor.getMagazine().getMainEditor().getUsername());
+		
+		taskService.complete(taskId, variables);
+		
+		//OVAKO UZIMAM AKTIVAN TASK U PROCESU
+		//Task newTaskId = taskService.createTaskQuery().processInstanceId(processId).singleResult();
+		//System.out.println(newTaskId.getId()+" aaaaaaaaaaa\n");
+		
 	}
 
 }
