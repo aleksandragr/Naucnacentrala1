@@ -31,12 +31,32 @@ import org.springframework.web.multipart.MultipartFile;
 import naucnaCentrala.dto.DataReviewDTO;
 import naucnaCentrala.dto.FormFieldsAddDTO;
 import naucnaCentrala.dto.FormFieldsDTO;
+import naucnaCentrala.dto.ReviewerDTO;
 import naucnaCentrala.dto.TaskDTO;
 import naucnaCentrala.model.DBFile;
+import naucnaCentrala.model.EditorSA;
 import naucnaCentrala.model.Labor;
+import naucnaCentrala.model.Magazine;
+import naucnaCentrala.model.Reviewer;
+import naucnaCentrala.model.ScientificArea;
+import naucnaCentrala.repository.EditorSARepository;
 import naucnaCentrala.repository.LaborRepository;
+import naucnaCentrala.repository.MagazineRepository;
+import naucnaCentrala.repository.ReviewerRepository;
+import naucnaCentrala.repository.ScientificAreaRepository;
 import naucnaCentrala.service.DBFileService;
 import naucnaCentrala.service.TaskEditorService;
+
+
+//U magazinu stomatologija, naucna oblast stomatologija nema urednika NO
+//1,2,3 reviewer->1 NO
+//4,5 reviewer->2 NO
+//6,7 reviewer->3 NO
+
+//1,2,8 reviewer->4 NO
+//nema->5 NO
+
+//nema->6 NO
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -63,6 +83,18 @@ public class TaskController {
 	
 	@Autowired
 	private LaborRepository laborRepository;
+	
+	@Autowired
+	private ScientificAreaRepository scientificAreaRepository;
+	
+	@Autowired
+	private EditorSARepository editorSARepository;
+	
+	@Autowired
+	private MagazineRepository magazineRepository;
+	
+	@Autowired
+	private ReviewerRepository reviewerRepository;
 	
 	@PreAuthorize("hasRole('AUTHOR')")
 	@GetMapping("/addtask/{idlabor}")
@@ -138,6 +170,9 @@ public class TaskController {
 		
 		case "Izmena PDF-a i podataka":
 			 return "changedata";
+			 
+		case "Biranje najmanje dva recenzenta":
+			 return "choose";
 		}
 		
 		return null;
@@ -216,6 +251,39 @@ public class TaskController {
 		if(formattedornot.equals("good")) {
 			variables.put("isFormatiran", true);
 			variables.put("komentarurednika","");
+			
+			
+			Task task = taskService.createTaskQuery().taskId(taskid).singleResult();
+			
+			String processId=task.getProcessInstanceId();
+			
+			String naucnaoblast= runtimeService.getVariable(processId, "naucnaoblast").toString();
+			
+			String glavnieditor = runtimeService.getVariable(processId, "maineditor").toString();
+			
+			ScientificArea scientificArea=scientificAreaRepository.findByNameEquals(naucnaoblast);
+			
+			List<EditorSA> editors = editorSARepository.findAll();
+			
+			for(EditorSA e: editors) {
+				if(e.getScientificArea()!=null) {
+					System.out.println("aaaaaa");
+					if(e.getScientificArea().getId().equals(scientificArea.getId())) {
+						System.out.println("eeeeeeee");
+						variables.put("editorSA", e.getUsername());
+						break;
+					}
+				}
+				else {
+					System.out.println("iiiiii");
+					variables.put("editorSA", glavnieditor);
+				}
+			}
+			
+			
+			
+			
+			
 		}else {
 			variables.put("isFormatiran", false);
 			variables.put("komentarurednika",comment.getValue());
@@ -278,6 +346,102 @@ public class TaskController {
 		
 		return null;
 	}
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/getreviewer/{taskid}")
+	public ResponseEntity<List<ReviewerDTO>> getReviewers(@PathVariable String taskid) {
+		
+		Task task = taskService.createTaskQuery().taskId(taskid).singleResult();
+		
+		String processId=task.getProcessInstanceId();
+		
+		Long magazineid= (Long) runtimeService.getVariable(processId, "idMagazina");
+		
+		Magazine magazine = magazineRepository.findByIdEquals(magazineid);
+		
+		List<ScientificArea> scareas = magazine.getScientificArea();
+		
+		List<Reviewer> reviewers = reviewerRepository.findAll();
+		
+		List<ReviewerDTO> retval = new ArrayList<>();
+		
+		for(int i=0; i<reviewers.size();i++) {
+			for(int j=0; j<reviewers.get(i).getScientificArea().size();j++) {
+				for(int k=0; k<scareas.size();k++) {
+					if(reviewers.get(i).getScientificArea().get(j).equals(scareas.get(k))) {
+						ReviewerDTO r = new ReviewerDTO();
+						r.setId(reviewers.get(i).getId());
+						r.setName(reviewers.get(i).getName());
+						r.setSurname(reviewers.get(i).getSurname());
+						r.setScientificarea(scareas.get(k).getName());
+						retval.add(r);
+					}
+				}
+			}
+			
+		}
+		
+		
+		return new ResponseEntity<>(retval,HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/filter/{taskid}")
+	public ResponseEntity<List<ReviewerDTO>> filter(@PathVariable String taskid) {
+		
+		Task task = taskService.createTaskQuery().taskId(taskid).singleResult();
+		
+		String processId=task.getProcessInstanceId();
+		
+		String naucnaoblast= runtimeService.getVariable(processId, "naucnaoblast").toString();
+		
+		List<ReviewerDTO> retval = new ArrayList<>();
+		
+		List<Reviewer> reviewers = reviewerRepository.findAll();
+		
+		for(Reviewer r:reviewers) {
+			for(ScientificArea s:r.getScientificArea())
+			if(s.getName().equals(naucnaoblast)) {
+				ReviewerDTO dto = new ReviewerDTO();
+				dto.setId(r.getId());
+				dto.setName(r.getName());
+				dto.setSurname(r.getSurname());
+				dto.setScientificarea(s.getName());
+				retval.add(dto);
+			}
+		}
+		
+		return new ResponseEntity<>(retval,HttpStatus.OK);
+	}
+	
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@PostMapping("/addreviewers/{taskid}")
+	public ResponseEntity<String> addReviewers(@PathVariable String taskid, @RequestBody ArrayList<String> listid) {
+		
+		ArrayList<String> odabrani = new ArrayList<>();
+		for(String s:listid) {
+			
+			Reviewer r = reviewerRepository.findByIdEquals(Long.valueOf(s).longValue());
+			odabrani.add(r.getUsername());
+		}
+		
+		Map<String, Object> retVal = new HashMap<>();
+		
+		retVal.put("listaRecenzenata", odabrani);
+		taskService.complete(taskid, retVal);;
+		
+		return new ResponseEntity<>("ok",HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

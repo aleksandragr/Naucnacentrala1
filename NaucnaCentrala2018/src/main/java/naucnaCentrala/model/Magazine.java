@@ -44,6 +44,16 @@ public class Magazine {
 	
 	private double amountmag;
 	
+	public List<EditorSA> getEditorSA() {
+		return editorSA;
+	}
+
+
+	public void setEditorSA(List<EditorSA> editorSA) {
+		this.editorSA = editorSA;
+	}
+
+
 	//PDF dokument
 	@OneToOne
 	private DBFile dbfile;
@@ -53,6 +63,9 @@ public class Magazine {
 	private String clientId;
 	
 	private String clientSecret;
+	
+	@OneToMany
+	private List<EditorSA> editorSA;
 	
 	
 	public String getBitcointoken() {

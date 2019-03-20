@@ -123,14 +123,14 @@ public class DataLoader implements ApplicationRunner{
 	     
 	    DBFile db9 = dbFileService.storeFile(multipartFile9);
 	    
-	    
+	    /*
 	    File file10 = new File(fpp + "Rad1.pdf");
 	    FileInputStream input10 = new FileInputStream(file10);
 	    MultipartFile multipartFile10 = new MockMultipartFile("file",
 	            file10.getName(), "application/pdf", IOUtils.toByteArray(input10));
 	     
 	    DBFile db10 = dbFileService.storeFile(multipartFile10);
-	    
+	    */
 	    
 	
 	}

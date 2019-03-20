@@ -22,11 +22,15 @@ import java.util.Set;
 
 import naucnaCentrala.dto.UserDTO;
 import naucnaCentrala.model.EditorReviewer;
+import naucnaCentrala.model.EditorSA;
 import naucnaCentrala.model.MembershipFee;
+import naucnaCentrala.model.Reviewer;
 import naucnaCentrala.model.Role;
 import naucnaCentrala.model.User;
 import naucnaCentrala.repository.EditorReviewerRepository;
+import naucnaCentrala.repository.EditorSARepository;
 import naucnaCentrala.repository.MembershipFeeRepository;
+import naucnaCentrala.repository.ReviewerRepository;
 import naucnaCentrala.repository.UserRepository;
 
 @Service
@@ -43,6 +47,12 @@ public class UserService implements UserDetailsService{
 	
 	@Autowired
 	private EditorReviewerRepository editorReviewerRepository;
+	
+	@Autowired
+	private EditorSARepository editorSARepository;
+	
+	@Autowired
+	private ReviewerRepository reviewerRepository;
 	
 	public String singUp(User user) {
 		
@@ -86,7 +96,18 @@ public class UserService implements UserDetailsService{
 		if(user == null) {
 			EditorReviewer er = editorReviewerRepository.findByUsername(username);
 			if(er==null) {
-				throw new UsernameNotFoundException(username);
+				//
+				EditorSA esa = editorSARepository.findByUsername(username);
+				if(esa==null) {
+					Reviewer r = reviewerRepository.findByUsername(username);
+					if(r==null) {
+						throw new UsernameNotFoundException(username);
+					}
+					return new org.springframework.security.core.userdetails.User(r.getUsername(), r.getPassword(), getAuthority(r));
+				}
+				//
+				//throw new UsernameNotFoundException(username);
+				return new org.springframework.security.core.userdetails.User(esa.getUsername(), esa.getPassword(), getAuthority(esa));
 			}
 			return new org.springframework.security.core.userdetails.User(er.getUsername(), er.getPassword(), getAuthority(er));
 		}
@@ -107,6 +128,28 @@ public class UserService implements UserDetailsService{
 	}
 	
 	private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        
+		user.getRoles().forEach(role -> {
+			//authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+		});
+		return authorities;
+		//return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
+	
+	private Set<SimpleGrantedAuthority> getAuthority(EditorSA user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        
+		user.getRoles().forEach(role -> {
+			//authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+		});
+		return authorities;
+		//return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
+	
+	private Set<SimpleGrantedAuthority> getAuthority(Reviewer user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         
 		user.getRoles().forEach(role -> {
@@ -145,6 +188,20 @@ public class UserService implements UserDetailsService{
 			userdto.setName(er.getName());
 			userdto.setSurname(er.getSurname());
 			userdto.setUsername(er.getUsername());
+		}
+		
+		EditorSA esa = editorSARepository.findByUsername(username);
+		if(esa!=null) {
+			userdto.setName(esa.getName());
+			userdto.setSurname(esa.getSurname());
+			userdto.setUsername(esa.getUsername());
+		}
+		
+		Reviewer r = reviewerRepository.findByUsername(username);
+		if(r!=null) {
+			userdto.setName(r.getName());
+			userdto.setSurname(r.getSurname());
+			userdto.setUsername(r.getUsername());
 		}
 			
 		

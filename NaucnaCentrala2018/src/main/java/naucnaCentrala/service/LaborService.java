@@ -20,12 +20,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import naucnaCentrala.model.EditorReviewer;
+import naucnaCentrala.model.EditorSA;
 import naucnaCentrala.model.Labor;
 import naucnaCentrala.model.Magazine;
 import naucnaCentrala.model.MembershipFee;
 import naucnaCentrala.model.ScientificArea;
 import naucnaCentrala.model.User;
 import naucnaCentrala.repository.EditorReviewerRepository;
+import naucnaCentrala.repository.EditorSARepository;
 import naucnaCentrala.repository.LaborRepository;
 import naucnaCentrala.repository.MagazineRepository;
 import naucnaCentrala.repository.MembershipFeeRepository;
@@ -61,6 +63,9 @@ public class LaborService {
 	
 	@Autowired
 	private RuntimeService runtimeService;
+	
+	@Autowired
+	private EditorSARepository editorSARepository;
 	
 	
 	public ArrayList<LaborDTO> getLabors(Long id){
@@ -268,6 +273,17 @@ public class LaborService {
 		variables.put("abstrakt", labor.getAbstracttext());
 		variables.put("pdf", "http://localhost:8048/dbfile/downloadFile="+labor.getDbfile().getId());
 		variables.put("maineditor", labor.getMagazine().getMainEditor().getUsername());
+		/*
+		ScientificArea scientificArea = labor.getScientificarea();
+		
+		List<EditorSA> editors = editorSARepository.findAll();
+		
+		for(EditorSA e: editors) {
+			if(e.getScientificArea().getId().equals(scientificArea.getId())) {
+				System.out.println();
+			}
+		}
+		*/
 		
 		taskService.complete(taskId, variables);
 		
