@@ -165,9 +165,13 @@ public class LaborService {
 				}
 			}
 			
+			if(labors.get(i).getState()!=null) {
+				if(labors.get(i).getState().equals("verified")) {
+					l.add(lab);
+				}
+			}
 			
 			
-			l.add(lab);
 		}
 		
 		

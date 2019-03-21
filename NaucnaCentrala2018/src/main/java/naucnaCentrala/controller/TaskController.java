@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import naucnaCentrala.dto.CommentsDTO;
 import naucnaCentrala.dto.DataReviewDTO;
 import naucnaCentrala.dto.FormFieldsAddDTO;
 import naucnaCentrala.dto.FormFieldsDTO;
+import naucnaCentrala.dto.MarkDTO;
 import naucnaCentrala.dto.ReviewerDTO;
 import naucnaCentrala.dto.TaskDTO;
 import naucnaCentrala.model.DBFile;
@@ -173,6 +175,18 @@ public class TaskController {
 			 
 		case "Biranje najmanje dva recenzenta":
 			 return "choose";
+			 
+		case "Recenzent cita rad, unosi komentare i preporuke za objavljivanje":
+			 return "reviewer";
+			 
+		case "Urednik pregleda odluke recenzenata":
+			 return "decisions";
+			 
+		case "Izmena rada i ponovno slanje PDF-a":
+			 return "upload";
+		
+		case "Urednik ponovo pregleda rad":
+			 return "againreview";
 		}
 		
 		return null;
@@ -342,7 +356,7 @@ public class TaskController {
 		HashMap<String, Object> mapp = new HashMap<>();
 		mapp.put("pdf", "http://localhost:8048/dbfile/downloadFile=" + labor.getDbfile().getId());
 		
-		taskService.complete(taskid,mapp); 
+		taskService.complete(taskid,mapp);
 		
 		return null;
 	}
@@ -431,10 +445,163 @@ public class TaskController {
 		Map<String, Object> retVal = new HashMap<>();
 		
 		retVal.put("listaRecenzenata", odabrani);
-		taskService.complete(taskid, retVal);;
+		taskService.complete(taskid, retVal);
 		
 		return new ResponseEntity<>("ok",HttpStatus.OK);
 	}
+	
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@PostMapping("/reviewertask/{taskid}")
+	public ResponseEntity<Boolean> reviewerTask(@PathVariable String taskid, @RequestBody ArrayList<FormFieldsAddDTO> listFields) {
+		
+		Task task = taskService.createTaskQuery().taskId(taskid).singleResult();
+		
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username="";
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		Map<String, Object> retVal = new HashMap<>();
+		
+		for(FormFieldsAddDTO f: listFields) {
+			retVal.put(f.getName()+"_"+username, f.getValue());
+		}
+		
+		taskService.complete(taskid, retVal);
+		
+		
+		return new ResponseEntity<>(true,HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/marks/{taskid}")
+	public ResponseEntity<ArrayList<MarkDTO>> getMarks(@PathVariable String taskid){
+		
+		Task task = taskService.createTaskQuery().taskId(taskid).singleResult();
+		
+		String processId=task.getProcessInstanceId();
+		
+		List<String> recenzenti= (List<String>) runtimeService.getVariable(processId, "listaRecenzenata");
+		
+		ArrayList<MarkDTO> retval = new ArrayList<>();
+		
+		for(String r: recenzenti) {
+			MarkDTO m = new MarkDTO(runtimeService.getVariable(processId, "r_komentaruredniku_"+r).toString(), runtimeService.getVariable(processId, "r_preporuka_"+r).toString());
+			retval.add(m);
+		}
+		
+		
+		return new ResponseEntity<>(retval,HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/finaldecision/{taskId}/{mark}")
+	public ResponseEntity<Boolean> finalDecision(@PathVariable String taskId, @PathVariable String mark) {
+		
+		Map<String, Object> variables = new HashMap<>();
+	
+		variables.put("ocena", mark);
+				
+		taskService.complete(taskId, variables);
+		
+		return new ResponseEntity<>(true,HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/getcomments/{taskId}")
+	public ResponseEntity<ArrayList<MarkDTO>> getComments(@PathVariable String taskId) {
+		
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
+		String processId=task.getProcessInstanceId();
+		
+		List<String> recenzenti= (List<String>) runtimeService.getVariable(processId, "listaRecenzenata");
+		
+		ArrayList<MarkDTO> retval = new ArrayList<>();
+		
+		for(String r: recenzenti) {
+			MarkDTO m = new MarkDTO(runtimeService.getVariable(processId, "r_komentarautoru_"+r).toString(), "");
+			retval.add(m);
+		}
+		
+		return new ResponseEntity<>(retval,HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@PostMapping("/addauthorcomment/{taskId}")
+	public ResponseEntity<Boolean> addAuthorComment(@PathVariable String taskId, @RequestBody FormFieldsAddDTO field) {
+		
+		Map<String, Object> variables = new HashMap<>();
+	
+		variables.put(field.getName(), field.getValue());
+				
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		String processId=task.getProcessInstanceId();
+		
+		runtimeService.setVariable(processId, field.getName(), field.getValue());
+		
+		return new ResponseEntity<>(true,HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/getAllcomments/{taskId}")
+	public ResponseEntity<CommentsDTO> getAllComments(@PathVariable String taskId) {
+		
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		
+		String processId=task.getProcessInstanceId();
+		
+		List<String> recenzenti= (List<String>) runtimeService.getVariable(processId, "listaRecenzenata");
+		
+		ArrayList<MarkDTO> retval = new ArrayList<>();
+		
+		for(String r: recenzenti) {
+			MarkDTO m = new MarkDTO(runtimeService.getVariable(processId, "r_komentarautoru_"+r).toString(), "");
+			retval.add(m);
+		}
+		
+		String komodautora= runtimeService.getVariable(processId, "answer_from_author").toString();
+		
+		CommentsDTO comments = new CommentsDTO();
+		comments.setOdautorazarez(retval);
+		comments.setKomodautora(komodautora);
+		
+		
+		return new ResponseEntity<>(comments,HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasRole('EDITOR') or hasRole('AUTHOR')")
+	@GetMapping("/isSatisfied/{taskId}/{satisfiedornot}")
+	public void SatisfiedOrNot(@PathVariable String taskId, @PathVariable String satisfiedornot) {
+		
+		Map<String, Object> variables = new HashMap<>();
+		
+		if(satisfiedornot.equals("satisfied")) {
+			
+			variables.put("isSatisfied", true);
+		}
+		else {
+			
+			variables.put("isSatisfied", false);
+		}
+		
+		taskService.complete(taskId, variables);
+	}
+	
+	
+	
 	
 	
 	

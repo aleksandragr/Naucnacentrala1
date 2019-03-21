@@ -51,6 +51,14 @@ INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`
 INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('8','4');
 
 
+INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('9','5');
+INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('10','5');
+INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('11','5');
+INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('12','5');
+
+INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('11','6');
+INSERT INTO `nc`.`reviewer_scientific_area` (`reviewer_id`, `scientific_area_id`) VALUES ('12','6');
+
 
 
 INSERT INTO `nc`.`scientific_area` (`id`, `code`, `name`) VALUES ('1','EHI','Elektrohemijsko inzenjerstvo');
@@ -109,15 +117,15 @@ INSERT INTO `nc`.`reviewer_roles` (`reviewer_id`, `roles_id`) VALUES ('11','3');
 INSERT INTO `nc`.`reviewer_roles` (`reviewer_id`, `roles_id`) VALUES ('12','3');
 
 
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('1','Mineraloske i kristalografske osobine zeolitskog tufa HEU-tipa lokaliteta Novakovic, Bosna i Hercegovina','','3','1','1','1');
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('2','Upravljacko – nadzorni sistem pogona za proizvodnju biodizela','','1','1','1','2');
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('3','Cvrste disperzije sa karbamazepinom optimizacija formulacija, karakterizacija i ispitivanje dugorocne stabilnosti','','2','1','1','3');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('1','Mineraloske i kristalografske osobine zeolitskog tufa HEU-tipa lokaliteta Novakovic, Bosna i Hercegovina','','3','1','1','1','verified');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('2','Upravljacko – nadzorni sistem pogona za proizvodnju biodizela','','1','1','1','2','verified');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('3','Cvrste disperzije sa karbamazepinom optimizacija formulacija, karakterizacija i ispitivanje dugorocne stabilnosti','','2','1','1','3','verified');
 
 
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('4','Hibridni metod za detekciju ivica na TEM slikama nanocestica','','4','2','2','4');
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('5','Ispitivanje uticaja tretmana i mineraloskog sastava na tacku nultog naelektrisanja crvenog mulja','','4','2','2','5');
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('6','Uticaj dodatka nanopunila na svojstva silikonskih materijala na osnovu razlicitih prekursora mreza','','5','2','1','6');
-INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('7','Mineraloska, fizicko-hemijska i keramicka svojstva gline Brezaci','','5','2','1','7');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('4','Hibridni metod za detekciju ivica na TEM slikama nanocestica','','4','2','2','4','verified');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('5','Ispitivanje uticaja tretmana i mineraloskog sastava na tacku nultog naelektrisanja crvenog mulja','','4','2','2','5','verified');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('6','Uticaj dodatka nanopunila na svojstva silikonskih materijala na osnovu razlicitih prekursora mreza','','5','2','1','6','verified');
+INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`, `state`) VALUES ('7','Mineraloska, fizicko-hemijska i keramicka svojstva gline Brezaci','','5','2','1','7','verified');
 
 
 /*INSERT INTO `nc`.`labor` (`id`, `heading`, `abstracttext`, `scientificarea_id`, `magazine_id`, `amountlabor`, `dbfile_id`) VALUES ('8','Rad1','','4','3','3','11');*/
